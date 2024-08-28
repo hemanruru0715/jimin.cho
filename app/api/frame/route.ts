@@ -78,7 +78,8 @@ if (error) throw new Error(error);
       //   src: `${NEXT_PUBLIC_URL}/park-1.png`,
       // },
       image: {
-        src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}`,
+        //src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}`,
+        src: `${NEXT_PUBLIC_URL}/park-3.png`,
       },
 
       //postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
