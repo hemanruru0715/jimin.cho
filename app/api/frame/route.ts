@@ -78,11 +78,10 @@ if (error) throw new Error(error);
       //   src: `${NEXT_PUBLIC_URL}/park-1.png`,
       // },
       image: {
-        //src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}`,
-        src: `${NEXT_PUBLIC_URL}/park-3.png`,
+        src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}`,
       },
 
-      //postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+      postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
       state: {
         //page: state?.page + 1,
         time: new Date().toISOString(),
