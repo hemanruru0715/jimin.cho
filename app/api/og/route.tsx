@@ -3,7 +3,7 @@ import { formatEther } from "viem";
 import { ImageResponse } from "next/og";
 import { NEXT_PUBLIC_URL } from "../../config";
 
-export const runtime = "edge";
+//export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 //const GRAPHQL_ENDPOINT = `https://gateway-arbitrum.network.thegraph.com/api/${process.env.THE_GRAPH_API_KEY}/subgraphs/id/2hTKKMwLsdfJm9N7gUeajkgg8sdJwky56Zpkvg8ZcyP8`;
