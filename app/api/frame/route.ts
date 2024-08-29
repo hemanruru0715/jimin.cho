@@ -102,6 +102,7 @@ import { FrameRequest, getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
+import { NEXT_PUBLIC_URL } from '../../config';
 
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
@@ -128,8 +129,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
           { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
         ],
-        image: { src: `${process.env.NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
-        postUrl: `${process.env.NEXT_PUBLIC_URL}/api/frame`,
+        image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
+        postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
         state: { time: new Date().toISOString() },
       })
     );
