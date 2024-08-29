@@ -98,16 +98,17 @@
 
 
 
-import { FrameRequest, getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
+import { getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
 import { NEXT_PUBLIC_URL } from '../../config';
 
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
-    
+
     const apiKey = process.env.AIRSTACK_API_KEY;
     if (!apiKey) {
       throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
@@ -116,6 +117,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     const body = await req.json();
     const { isValid, message } = await validateFramesMessage(body);
+
+    if (!isValid) {
+      return new NextResponse('Message not valid', { status: 500 });
+    }
 
     const myFid = Number(message?.data?.fid) || 0;
     const input: FarcasterUserDetailsInput = { fid: myFid };
