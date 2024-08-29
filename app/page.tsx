@@ -27,7 +27,7 @@ const frameMetadata = getFrameMetadata({
 export const metadata: Metadata = {
   title: 'zizzamia.xyz',
   description: 'LFG',
-  metadataBase: new URL('https://lemon-frame.vercel.app'),  // 기본 URL 설정
+  //metadataBase: new URL('https://lemon-frame.vercel.app'),  // 기본 URL 설정
   openGraph: {
     title: 'zizzamia.xyz',
     description: 'LFG',
