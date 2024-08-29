@@ -1,5 +1,3 @@
-import { GraphQLClient, gql } from "graphql-request";
-import { formatEther } from "viem";
 import { ImageResponse } from "next/og";
 import { NEXT_PUBLIC_URL } from "../../config";
 
