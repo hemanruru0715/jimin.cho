@@ -103,16 +103,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
 
-const apiKey = process.env.AIRSTACK_API_KEY;
-
-if (!apiKey) {
-  throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
-}
-
-init(apiKey);
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
+    const apiKey = process.env.AIRSTACK_API_KEY;
+    if (!apiKey) {
+      throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
+    }
+    init(apiKey);
+
     const body = await req.json();
     const { isValid, message } = await validateFramesMessage(body);
 
