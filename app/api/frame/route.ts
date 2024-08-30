@@ -102,7 +102,8 @@ import { getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
-import { NEXT_PUBLIC_URL } from '../../config';
+//import { NEXT_PUBLIC_URL } from '../../config';
+import { NEXT_PUBLIC_URL } from '@/app/config';
 
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 

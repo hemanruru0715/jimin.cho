@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
-import { NEXT_PUBLIC_URL } from "../../config";
+//import { NEXT_PUBLIC_URL } from "../../config";
+import { NEXT_PUBLIC_URL } from '@/app/config';
 
 //export const runtime = "edge";
 export const dynamic = "force-dynamic";
