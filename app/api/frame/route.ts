@@ -159,14 +159,14 @@ import { NEXT_PUBLIC_URL } from '@/app/config';
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
 
-    // const apiKey = process.env.AIRSTACK_API_KEY;
-    // if (!apiKey) {
-    //   throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
-    // }
-    
-    init(process.env.AIRSTACK_API_KEY ?? "");
-
     const body = await req.json();
+
+    const apiKey = process.env.AIRSTACK_API_KEY;
+    if (!apiKey) {
+      throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
+    }
+    
+    init(apiKey);
 
     const { isValid, message } = await validateFramesMessage(body);
 
