@@ -178,7 +178,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // const input: FarcasterUserDetailsInput = { fid: myFid };
     // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
 
-     if (error) throw new Error(error);
+     //if (error) throw new Error(error);
 
     return new NextResponse(
       getFrameHtmlResponse({
