@@ -159,24 +159,26 @@ import { NEXT_PUBLIC_URL } from '@/app/config';
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
 
+
+    const body = await req.json();
+
     const apiKey = process.env.AIRSTACK_API_KEY;
     if (!apiKey) {
       throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
     }
     init(apiKey);
+    
+    const { isValid, message } = await validateFramesMessage(body);
 
-    // const body = await req.json();
-    // const { isValid, message } = await validateFramesMessage(body);
+    if (!isValid) {
+      return new NextResponse('Message not valid', { status: 500 });
+    }
 
-    // if (!isValid) {
-    //   return new NextResponse('Message not valid', { status: 500 });
-    // }
+    const myFid = Number(message?.data?.fid) || 0;
+    const input: FarcasterUserDetailsInput = { fid: myFid };
+    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
 
-    // const myFid = Number(message?.data?.fid) || 0;
-    // const input: FarcasterUserDetailsInput = { fid: myFid };
-    // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
-
-    // if (error) throw new Error(error);
+     if (error) throw new Error(error);
 
     return new NextResponse(
       getFrameHtmlResponse({
