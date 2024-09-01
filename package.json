@@ -1,13 +1,11 @@
 {
-  "name": "a-frame-in-100-lines",
+  "name": "frame_jimin2",
   "version": "0.14.0",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "format": "prettier --log-level warn --write .",
     "start": "next start",
-    "lint": "next lint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "next lint"
   },
   "keywords": [],
   "author": "https://twitter.com/Zizzamia",
