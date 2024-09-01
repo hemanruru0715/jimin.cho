@@ -17,9 +17,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     
 
     console.log("test!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
+    console.log("process.env.AIRSTACK_API_KEY=" + process.env.AIRSTACK_API_KEY);
 
-    const apiKey = "process.env.NEXT_PUBLIC_AIRSTACK_API_KEY" ?? "default_api_key";
+    const apiKey = process.env.AIRSTACK_API_KEY ?? "default_api_key";
     init(apiKey);
 
     //init(process.env.AIRSTACK_API_KEY ?? "");
