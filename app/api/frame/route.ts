@@ -23,18 +23,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // init(apiKey ?? "");
 
     console.log("body=" + body);
-    
-    const { isValid, message } = await validateFramesMessage(body);
 
-    if (!isValid) {
-      return new NextResponse('Message not valid', { status: 500 });
-    }
+    // const { isValid, message } = await validateFramesMessage(body);
 
-    const myFid = Number(message?.data?.fid) || 0;
-    const input: FarcasterUserDetailsInput = { fid: myFid };
-    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
+    // if (!isValid) {
+    //   return new NextResponse('Message not valid', { status: 500 });
+    // }
 
-     if (error) throw new Error(error);
+    // const myFid = Number(message?.data?.fid) || 0;
+    // const input: FarcasterUserDetailsInput = { fid: myFid };
+    // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
+
+    //  if (error) throw new Error(error);
 
     return new NextResponse(
       getFrameHtmlResponse({
