@@ -43,8 +43,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
           { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
         ],
-        image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
-        //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
+        //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
+        image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
         //state: { time: new Date().toISOString() },
       })
