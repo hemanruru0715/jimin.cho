@@ -15,7 +15,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     //   throw new Error("AIRSTACK_API_KEY is not defined in environment variables");
     // }
     
-    init(process.env.AIRSTACK_API_KEY);
+    init(process.env.AIRSTACK_API_KEY ?? "");
 
     // const { isValid, message } = await validateFramesMessage(body);
 
