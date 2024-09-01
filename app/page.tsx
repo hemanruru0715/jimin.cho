@@ -53,17 +53,19 @@ import { getFrameMetadata } from '@coinbase/onchainkit/frame';
 import type { Metadata } from 'next';
 import { NEXT_PUBLIC_URL } from './config';
 
-export async function getServerSideProps() {
+// 서버 컴포넌트에서 데이터를 페칭하는 함수
+async function fetchFrameData() {
   const res = await fetch(`${NEXT_PUBLIC_URL}/api/frame`, {
     method: 'POST',
+    // 필요한 경우 쿠키나 인증 헤더를 추가할 수 있습니다.
+    // headers: { 'Authorization': `Bearer ${token}` }
   });
-  const frameData = await res.json();
+  
+  if (!res.ok) {
+    throw new Error('Failed to fetch frame data');
+  }
 
-  return {
-    props: {
-      frameData,
-    },
-  };
+  return res.json();
 }
 
 export const metadata: Metadata = {
@@ -74,12 +76,12 @@ export const metadata: Metadata = {
     description: 'LFG',
     images: [`${NEXT_PUBLIC_URL}/park-1.png`],
   },
-  other: {
-    // frameMetadata could be set here if it's needed
-  },
 };
 
-export default function Page({ frameData }: { frameData: any }) {
+export default async function Page() {
+  // 서버 컴포넌트에서 데이터를 직접 페칭
+  const frameData = await fetchFrameData();
+
   return (
     <>
       <h1>zizzamia.xyz</h1>
