@@ -5,8 +5,8 @@ import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
 import { NEXT_PUBLIC_URL } from '@/app/config';
 
-async function getResponse(req: NextRequest) {
-  try {
+async function getResponse(req: NextRequest): Promise<NextResponse> {
+//  try {
 
     const body = await req.json();
 
@@ -37,25 +37,25 @@ async function getResponse(req: NextRequest) {
     //  if (error) throw new Error(error);
 
     return new NextResponse(
-      getFrameHtmlResponse({
-        buttons: [
-          { label: 'abcd' },
-          { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
-          { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
-        ],
-        //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
-        image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
-        postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
-        //state: { time: new Date().toISOString() },
-      })
+      // getFrameHtmlResponse({
+      //   buttons: [
+      //     { label: 'abcd' },
+      //     { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
+      //     { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
+      //   ],
+      //   //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
+      //   image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
+      //   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+      //   //state: { time: new Date().toISOString() },
+      // })
     );
-  } catch (error) {
-    console.error('Error processing request:', error);
-    return new NextResponse('Internal Server Error', { status: 500 });
-  }
+  // } catch (error) {
+  //   console.error('Error processing request:', error);
+  //   return new NextResponse('Internal Server Error', { status: 500 });
+  // }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);
 }
 
