@@ -16,8 +16,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // }
     
     //init(process.env.AIRSTACK_API_KEY ?? "");
-    init("1f7022e6a260348e982f3427620e28f5a" ?? "");
-    
 
     // const { isValid, message } = await validateFramesMessage(body);
 
