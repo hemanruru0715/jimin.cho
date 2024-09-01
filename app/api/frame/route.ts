@@ -24,11 +24,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     console.log("body=" + JSON.stringify(body));
 
-    // const { isValid, message } = await validateFramesMessage(body);
+    const { isValid, message } = await validateFramesMessage(body);
 
-    // if (!isValid) {
-    //   return new NextResponse('Message not valid', { status: 500 });
-    // }
+    if (!isValid) {
+      return new NextResponse('Message not valid', { status: 500 });
+    }
 
     // const myFid = Number(message?.data?.fid) || 0;
     // const input: FarcasterUserDetailsInput = { fid: myFid };
