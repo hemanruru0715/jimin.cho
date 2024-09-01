@@ -16,12 +16,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // }
     
 
-    console.log("test!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
+    // console.log("test!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
 
-    const apiKey = process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? "default_api_key";
-    init(apiKey ?? "");
+    // const apiKey = process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? "default_api_key";
+    // init(apiKey ?? "");
 
+    console.log("body=" + body);
+    
     const { isValid, message } = await validateFramesMessage(body);
 
     if (!isValid) {
