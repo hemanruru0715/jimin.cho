@@ -20,34 +20,32 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
 
     const apiKey = process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? "default_api_key";
-    init(apiKey);
+    init(apiKey ?? "");
 
-    //init(process.env.AIRSTACK_API_KEY ?? "");
+    const { isValid, message } = await validateFramesMessage(body);
 
-    // const { isValid, message } = await validateFramesMessage(body);
+    if (!isValid) {
+      return new NextResponse('Message not valid', { status: 500 });
+    }
 
-    // if (!isValid) {
-    //   return new NextResponse('Message not valid', { status: 500 });
-    // }
+    const myFid = Number(message?.data?.fid) || 0;
+    const input: FarcasterUserDetailsInput = { fid: myFid };
+    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
 
-    // const myFid = Number(message?.data?.fid) || 0;
-    // const input: FarcasterUserDetailsInput = { fid: myFid };
-    // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
-
-    //  if (error) throw new Error(error);
+     if (error) throw new Error(error);
 
     return new NextResponse(
-      // getFrameHtmlResponse({
-      //   buttons: [
-      //     { label: 'abcd' },
-      //     { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
-      //     { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
-      //   ],
-      //   //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
-      //   image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
-      //   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
-      //   //state: { time: new Date().toISOString() },
-      // })
+      getFrameHtmlResponse({
+        buttons: [
+          { label: 'abcd' },
+          { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
+          { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
+        ],
+        image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
+        //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
+        postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+        //state: { time: new Date().toISOString() },
+      })
     );
   // } catch (error) {
   //   console.error('Error processing request:', error);
