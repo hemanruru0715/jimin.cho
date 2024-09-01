@@ -39,7 +39,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
         image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
-        state: { time: new Date().toISOString() },
+        //state: { time: new Date().toISOString() },
       })
     );
   } catch (error) {
