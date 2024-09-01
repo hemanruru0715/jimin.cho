@@ -6,7 +6,7 @@ import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetail
 import { NEXT_PUBLIC_URL } from '@/app/config';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-//  try {
+  try {
 
     const body = await req.json();
 
@@ -49,10 +49,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         //state: { time: new Date().toISOString() },
       })
     );
-  // } catch (error) {
-  //   console.error('Error processing request:', error);
-  //   return new NextResponse('Internal Server Error', { status: 500 });
-  // }
+  } catch (error) {
+    console.error('Error processing request:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
