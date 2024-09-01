@@ -5,7 +5,7 @@ import { init, validateFramesMessage } from '@airstack/frames';
 import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetailsOutput } from '@airstack/frames';
 import { NEXT_PUBLIC_URL } from '@/app/config';
 
-async function getResponse(req: NextRequest): Promise<NextResponse> {
+async function getResponse(req: NextRequest) {
   try {
 
     const body = await req.json();
@@ -19,22 +19,22 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     console.log("test!!!!!!!!!!!!!!!!!!!!!!!!!");
     console.log("process.env.AIRSTACK_API_KEY=" + process.env.AIRSTACK_API_KEY);
 
-    const apiKey = "12eaf69019b4d4dad924374aef0233d78" ?? "default_api_key";
+    const apiKey = "process.env.AIRSTACK_API_KEY" ?? "default_api_key";
     init(apiKey);
 
     //init(process.env.AIRSTACK_API_KEY ?? "");
 
-    const { isValid, message } = await validateFramesMessage(body);
+    // const { isValid, message } = await validateFramesMessage(body);
 
-    if (!isValid) {
-      return new NextResponse('Message not valid', { status: 500 });
-    }
+    // if (!isValid) {
+    //   return new NextResponse('Message not valid', { status: 500 });
+    // }
 
-    const myFid = Number(message?.data?.fid) || 0;
-    const input: FarcasterUserDetailsInput = { fid: myFid };
-    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
+    // const myFid = Number(message?.data?.fid) || 0;
+    // const input: FarcasterUserDetailsInput = { fid: myFid };
+    // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
 
-     if (error) throw new Error(error);
+    //  if (error) throw new Error(error);
 
     return new NextResponse(
       getFrameHtmlResponse({
@@ -55,7 +55,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   }
 }
 
-export async function POST(req: NextRequest): Promise<Response> {
+export async function POST(req: NextRequest) {
   return getResponse(req);
 }
 
