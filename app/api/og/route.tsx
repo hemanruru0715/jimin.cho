@@ -10,16 +10,6 @@ export const dynamic = "force-dynamic";
 // const noCacheFetch = async (url: string, options: RequestInit) =>
 //   fetch(url, options);
 
-
-  const { searchParams } = new URL(request.url);
-
-  // const logo = searchParams.get('logo');
-  // const logo = "https://docs-og-pimlico.vercel.app/pimlico-purple.svg"
-  // const logo = "./pimlico-purple.svg"
-  const userOpHash = searchParams.get('userOpHash');
-  const address = searchParams.get('address');
-  const fid = searchParams.get('fid');
-
 export async function GET(req: Request) {
 //   const document = gql`
 //     {
