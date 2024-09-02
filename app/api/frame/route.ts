@@ -19,7 +19,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // }
     
     console.log("test!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
+    //console.log("process.env.NEXT_PUBLIC_AIRSTACK_API_KEY=" + process.env.NEXT_PUBLIC_AIRSTACK_API_KEY);
 
     const apiKey = process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? "default_api_key";
     init(apiKey ?? "");
@@ -29,11 +29,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       return new NextResponse('Message not valid', { status: 500 });
     }
 
-    // const myFid = Number(message?.data?.fid) || 0;
-    // const input: FarcasterUserDetailsInput = { fid: myFid };
-    // const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
+    const myFid = Number(message?.data?.fid) || 0;
+    const input: FarcasterUserDetailsInput = { fid: myFid };
+    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
 
-    //  if (error) throw new Error(error);
+      if (error) throw new Error(error);
 
     return new NextResponse(
       getFrameHtmlResponse({
@@ -42,8 +42,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           { action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' },
           { action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' },
         ],
-        //image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
-        image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
+        image: { src: `${NEXT_PUBLIC_URL}/api/og?fid=${myFid}` },
+        //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
         //state: { time: new Date().toISOString() },
       })

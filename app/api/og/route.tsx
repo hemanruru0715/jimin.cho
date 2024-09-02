@@ -10,7 +10,17 @@ export const dynamic = "force-dynamic";
 // const noCacheFetch = async (url: string, options: RequestInit) =>
 //   fetch(url, options);
 
-export async function GET() {
+
+  const { searchParams } = new URL(request.url);
+
+  // const logo = searchParams.get('logo');
+  // const logo = "https://docs-og-pimlico.vercel.app/pimlico-purple.svg"
+  // const logo = "./pimlico-purple.svg"
+  const userOpHash = searchParams.get('userOpHash');
+  const address = searchParams.get('address');
+  const fid = searchParams.get('fid');
+
+export async function GET(req: Request) {
 //   const document = gql`
 //     {
 //       sales(orderBy: timestamp, orderDirection: desc, first: 1) {
@@ -46,6 +56,9 @@ export async function GET() {
 //   const response: any = await graphQLClient.request(document);
 
 //   console.warn("!!!!!!!!!!!!!!!!document=" + JSON.stringify(document));
+
+  const { searchParams } = new URL(req.url);
+  const fid = searchParams.get('fid');
 
   if (true) {
     return new ImageResponse(
@@ -94,7 +107,7 @@ export async function GET() {
                 }}
               >
                 <div style={{ marginBottom: "20px", display: "flex" }}>
-                  Price: 150 ETH
+                  Price: 150 ETH fid= {fid}
                 </div>
                 <div style={{ marginBottom: "20px", display: "flex" }}>
                   Time:
