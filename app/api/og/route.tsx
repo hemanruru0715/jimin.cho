@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from "@vercel/og";
 //import { NEXT_PUBLIC_URL } from "../../config";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 
