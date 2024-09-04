@@ -5,6 +5,8 @@ import { NEXT_PUBLIC_URL } from '@/app/config';
 //export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 //const GRAPHQL_ENDPOINT = `https://gateway-arbitrum.network.thegraph.com/api/${process.env.THE_GRAPH_API_KEY}/subgraphs/id/2hTKKMwLsdfJm9N7gUeajkgg8sdJwky56Zpkvg8ZcyP8`;
 
 // const noCacheFetch = async (url: string, options: RequestInit) =>
@@ -49,18 +51,31 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const fid = searchParams.get('fid');
+  const followerCount = searchParams.get('followerCount');
+  const followingCount = searchParams.get('followingCount');
+
+  
+  //const profileImage = searchParams.get('profileImage');
+  const profileImage = searchParams.get('profileImage') || `${NEXT_PUBLIC_URL}/default-image.png`;
+
+  // if(profileImage == null){
+  //   profileImage = `${NEXT_PUBLIC_URL}/park-3.png`;
+  // }
+
+  console.warn("fid=" + fid);
+  console.warn("profileImage=" + profileImage);
 
   if (true) {
     return new ImageResponse(
         (
             <div
               style={{
-                fontSize: 40,
+                fontSize: 60,
                 color: "white",
                 background: "#638596",
                 width: "100%",
                 height: "100%",
-                padding: "50px 200px",
+                // padding: "0px 200px",
                 textAlign: "center",
                 display: "flex",
                 justifyContent: "center",
@@ -69,7 +84,8 @@ export async function GET(req: Request) {
               }}
             >
               <img
-                src={`${NEXT_PUBLIC_URL}/park-3.png`}
+                //src={`${NEXT_PUBLIC_URL}/park-3.png`}
+                src={profileImage}
                 height="400"
                 width="400"
                 style={{
@@ -96,13 +112,13 @@ export async function GET(req: Request) {
                   zIndex: 1,
                 }}
               >
-                <div style={{ marginBottom: "20px", display: "flex" }}>
-                  Price: 150 ETH fid= {fid}
+                <div style={{ marginBottom: "10px", display: "flex" }}>
+                  fid: {fid}
                 </div>
-                <div style={{ marginBottom: "20px", display: "flex" }}>
-                  Time:
+                <div style={{ marginBottom: "10px", display: "flex" }}>
+                followerCount: {followerCount} / followingCount: {followingCount}
                 </div>
-                <div style={{ marginTop: "100px", display: "flex", fontSize: "15px" }}>
+                <div style={{ marginTop: "100px", display: "flex", fontSize: "50px" }}>
                   Last Update: {new Date().toISOString()}
                 </div>
               </div>
