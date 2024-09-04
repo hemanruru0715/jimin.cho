@@ -5,7 +5,12 @@ import { NEXT_PUBLIC_URL } from './config';
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Story time',
+      label: 'My Stats',
+    },
+    {
+      action: 'link', 
+      label: 'Share', 
+      target: 'https://onchainkit.xyz' 
     },
     // {
     //   action: 'tx',
@@ -15,19 +20,19 @@ const frameMetadata = getFrameMetadata({
     // },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/park-3.png`,
-    aspectRatio: '1:1',
+    src: `${NEXT_PUBLIC_URL}/park-1.png`,
+    //aspectRatio: '1:1',
   },
-  input: {
-    text: 'Tell me a story',
-  },
+  // input: {
+  //   text: 'Tell me a story',
+  // },
   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
 });
 
 export const metadata: Metadata = {
   title: 'zizzamia.xyz',
   description: 'LFG',
-  //metadataBase: new URL('https://lemon-frame.vercel.app'),  // 기본 URL 설정
+  metadataBase: new URL('https://hemanruru.vercel.app'),  // 기본 URL 설정
   openGraph: {
     title: 'zizzamia.xyz',
     description: 'LFG',
