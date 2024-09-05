@@ -109,10 +109,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             label: 'abcd' 
           },
           { 
-            action: 'link', label: 'link/🔎', target: 'https://onchainkit.xyz' 
-          },
-          { 
-            action: 'link', label: 'Dog pictures', target: 'https://www.naver.com' 
+            action: 'link', 
+            label: 'Share', 
+            target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://jimin.cho.vercel.app/' 
           },
         ],
         image: { 

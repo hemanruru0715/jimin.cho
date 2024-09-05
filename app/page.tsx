@@ -10,7 +10,7 @@ const frameMetadata = getFrameMetadata({
     {
       action: 'link', 
       label: 'Share', 
-      target: 'https://onchainkit.xyz' 
+      target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://jimin-cho.vercel.app/' 
     },
     // {
     //   action: 'tx',
