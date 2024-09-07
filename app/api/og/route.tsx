@@ -157,7 +157,7 @@ import path from 'path';
 //export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // woff 파일 경로
 const fontPath = path.join(process.cwd(), 'public/fonts/Roboto-Regular.ttf');

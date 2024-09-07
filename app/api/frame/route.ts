@@ -7,7 +7,7 @@ import { fetchQuery } from "@airstack/node";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import { config } from "dotenv";
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 export const dynamic = 'force-dynamic';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
