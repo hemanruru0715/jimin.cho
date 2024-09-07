@@ -16,6 +16,7 @@ const frameMetadata = getFrameMetadata({
   ],
   image: {
     src: `${NEXT_PUBLIC_URL}/mainImage.svg`,
+    //src: `${NEXT_PUBLIC_URL}/park-3.png`,
     //src: `${NEXT_PUBLIC_URL}/api/og/pageMain.tsx`,
     aspectRatio: '1:1',
   },
@@ -24,11 +25,11 @@ const frameMetadata = getFrameMetadata({
 
 
 export const metadata: Metadata = {
-  title: 'hemanruru.vercel.app',
+  title: 'jimin-cho.vercel.app',
   description: 'LFG',
-  metadataBase: new URL('https://hemanruru.vercel.app'),  // 기본 URL 설정
+  metadataBase: new URL('https://jimin-cho.vercel.app'),  // 기본 URL 설정
   openGraph: {
-    title: 'hemanruru.vercel.app',
+    title: 'jimin-cho.vercel.app',
     description: 'Check the MOXIE stats',
      images: [`${NEXT_PUBLIC_URL}/park-3.png`],
   },
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>hemanruru.vercel.app</h1>
+      <h1>jimin-cho.vercel.app</h1>
     </>
   );
 }
