@@ -1,42 +1,36 @@
 import { getFrameMetadata } from '@coinbase/onchainkit/frame';
 import type { Metadata } from 'next';
 import { NEXT_PUBLIC_URL } from './config';
+import { ImageResponse } from "@vercel/og";
 
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'My Stats',
+      label: 'MyStats/🔎',
     },
     {
       action: 'link', 
-      label: 'Share', 
+      label: '🔄Share', 
       target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://jimin-cho.vercel.app/' 
     },
-    // {
-    //   action: 'tx',
-    //   label: 'Send Base Sepolia',
-    //   target: `${NEXT_PUBLIC_URL}/api/tx`,
-    //   postUrl: `${NEXT_PUBLIC_URL}/api/tx-success`,
-    // },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/park-1.png`,
-    //aspectRatio: '1:1',
+    src: `${NEXT_PUBLIC_URL}/mainImage.svg`,
+    //src: `${NEXT_PUBLIC_URL}/api/og/pageMain.tsx`,
+    aspectRatio: '1:1',
   },
-  // input: {
-  //   text: 'Tell me a story',
-  // },
   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
 });
 
+
 export const metadata: Metadata = {
-  title: 'zizzamia.xyz',
+  title: 'hemanruru.vercel.app',
   description: 'LFG',
   metadataBase: new URL('https://hemanruru.vercel.app'),  // 기본 URL 설정
   openGraph: {
-    title: 'zizzamia.xyz',
-    description: 'LFG',
-     images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+    title: 'hemanruru.vercel.app',
+    description: 'Check the MOXIE stats',
+     images: [`${NEXT_PUBLIC_URL}/park-3.png`],
   },
   other: {
     ...frameMetadata,
@@ -46,7 +40,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>zizzamia.xyz</h1>
+      <h1>hemanruru.vercel.app</h1>
     </>
   );
 }

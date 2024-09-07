@@ -106,7 +106,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       getFrameHtmlResponse({
         buttons: [
           { 
-            label: 'abcd' 
+            label: 'MyStats/🔎' 
           },
           { 
             action: 'link', 
@@ -117,7 +117,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         image: { 
           src: `${NEXT_PUBLIC_URL}/api/og?profileName=${data?.profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &followerCount=${data?.followerCount}&followingCount=${data?.followingCount}`,
-          //aspectRatio: '1:1',
+          aspectRatio: '1:1',
         },
         //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
