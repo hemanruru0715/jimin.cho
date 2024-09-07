@@ -111,7 +111,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           { 
             action: 'link', 
             label: 'Share', 
-            target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://jimin.cho.vercel.app/' 
+            target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://jimin-cho.vercel.app' 
           },
         ],
         image: { 

@@ -283,7 +283,7 @@ export async function GET(req: Request) {
 
           <div style={{ position: 'absolute', top: '5px', right: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img
-              src={`${NEXT_PUBLIC_URL}/moxieImage.svg`} // SVG 파일 경로 확인
+              src={`${NEXT_PUBLIC_URL}/moxieImage.png`} // SVG 파일 경로 확인
               height="150"
               width="200"  // 크기 조정
               style={{
