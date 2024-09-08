@@ -174,24 +174,87 @@ export async function GET(req: Request) {
   const followingCount = searchParams.get('followingCount');
   const profileImage = searchParams.get('profileImage') || `${NEXT_PUBLIC_URL}/default-image.png`;
 
+  const farScore = searchParams.get('farScore') ?? "";
+  const farBoost = searchParams.get('farBoost') ?? "";
+  const farRank = searchParams.get('farRank') ?? "";
+
+  const todayAmount = searchParams.get('todayAmount') ?? "";
+  const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
+  const lifeTimeAmount = searchParams.get('lifeTimeAmount') ?? "";
+
   console.warn("profileName=" + profileName);
   console.warn("fid=" + fid);
+  // console.warn("farScore=" + farScore);
+  // console.warn("farBoost=" + farBoost);
+  // console.warn("farRank=" + farRank);
+  // console.warn("todayAmount=" + todayAmount);
+  // console.warn("weeklyAmount=" + weeklyAmount);
+  // console.warn("lifeTimeAmount=" + lifeTimeAmount);
+
+
+  let like  = 0;
+  let reply = 0;
+  let rcQt  = 0;
+
+  let likeUsd  = 0;
+  let replyUsd = 0;
+  let rcQtUsd  = 0;
+
+  let likeKrw  = 0;
+  let replyKrw = 0;
+  let rcQtKrw  = 0;
+
+  let todayAmountUsd    = 0;
+  let weeklyAmountUsd   = 0;
+  let lifeTimeAmountUsd = 0;
+
+  let todayAmountKrw    = 0;
+  let weeklyAmountKrw   = 0;
+  let lifeTimeAmountKrw = 0;
 
   let moxieUsdPrice = 'N/A';
   let moxieKrwPrice = 'N/A';
-  let todayMoxie = 'N/A';
 
   try {
     const { moxieUsdPrice: usdPrice, moxieKrwPrice: krwPrice } = await fetchCoinData();
     moxieUsdPrice = parseFloat(usdPrice).toLocaleString('en-US', { minimumFractionDigits: 5 });
     moxieKrwPrice = parseFloat(krwPrice).toLocaleString('ko-KR');
 
-    todayMoxie = '112233';
-    todayMoxie =  parseFloat(todayMoxie).toLocaleString()
-
     console.warn("moxieUsdPrice=" + moxieUsdPrice);
     console.warn("moxieKrwPrice=" + moxieKrwPrice);
-    console.warn("todayMoxie=" + parseFloat(todayMoxie).toLocaleString());
+
+    //화면 구성값 계산
+    like  = parseFloat(farScore) * 1;
+    reply = parseFloat((parseFloat(farScore) * 5).toFixed(3));
+    rcQt  = parseFloat((parseFloat(farScore) * 10).toFixed(3));
+
+    // console.warn("like=" + like);
+    // console.warn("reply=" + reply);
+    // console.warn("rcQt=" + rcQt);
+
+    likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4));
+    replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));
+    rcQtUsd  = parseFloat((rcQt * parseFloat(moxieUsdPrice)).toFixed(4));
+
+    // console.warn("likeUsd=" + likeUsd);
+    // console.warn("replyUsd=" + replyUsd);
+    // console.warn("rcQtUsd=" + rcQtUsd);
+
+    likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
+    replyKrw = parseFloat((reply * parseFloat(moxieKrwPrice)).toFixed(2));
+    rcQtKrw  = parseFloat((rcQt * parseFloat(moxieKrwPrice)).toFixed(2));
+
+    // console.warn("likeKrw=" + likeKrw);
+    // console.warn("replyKrw=" + replyKrw);
+    // console.warn("rcQtKrw=" + rcQtKrw);
+
+    todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
+    weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
+    lifeTimeAmountUsd = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
+
+    todayAmountKrw    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
+    weeklyAmountKrw   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
+    lifeTimeAmountKrw = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
 
   } catch (error) {
     console.error('Error fetching MOXIE price:', error);
@@ -277,7 +340,7 @@ export async function GET(req: Request) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
-                      Moxie Price1222
+                      Moxie Price
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
@@ -293,7 +356,7 @@ export async function GET(req: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'black' }}>
               <span>
               
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '140px', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '120px', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       FarScore
@@ -301,17 +364,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      0.18
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      0.18 USD
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      0.18 KRW
+                      {farScore}
                     </span>
                   </div>
 
@@ -320,24 +373,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '80px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
                     <span>
                      Like 👍
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      2.22
+                      {like}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      2.22 USD
+                      ({likeUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      2.22 KRW
+                      ({likeKrw} KRW)
                     </span>
                   </div>
 
@@ -346,24 +399,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '80px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '88px' }}>
                     <span>
                       Today
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                       {todayMoxie}
+                      {todayAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      53.22 USD
+                      ({todayAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      53.22 KRW
+                      ({todayAmountKrw} KRW)
                     </span>
                   </div>
                 </div>
@@ -377,17 +430,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      0.11
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      0.11 USD
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      0.11 KRW
+                    {farBoost}
                     </span>
                   </div>
 
@@ -404,17 +447,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      0.11
+                      {reply} 
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      0.11 USD
+                      ({replyUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      0.11 KRW
+                      ({replyKrw} KRW)
                     </span>
                   </div>
 
@@ -431,17 +474,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      0.11
+                      {weeklyAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      0.11 USD
+                      ({weeklyAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      0.11 KRW
+                      ({weeklyAmountKrw} KRW)
                     </span>
                   </div>
                 </div>
@@ -455,17 +498,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      4228
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      4228 USD
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      4228 KRW
+                    {farRank}
                     </span>
                   </div>
 
@@ -474,24 +507,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '80px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
                     <span>
-                      Rcast/Quote 🔄
+                      Rc/Qt 🔄
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      4228
+                      {rcQt}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      4228 USD
+                    ({rcQtUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      4228 KRW
+                    ({rcQtKrw} KRW)
                     </span>
                   </div>
 
@@ -500,24 +533,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '80px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '88px' }}>
                     <span>
                       Lifetime
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      4228
+                      {lifeTimeAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      4228 USD
+                      ({lifeTimeAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      4228 KRW
+                      ({lifeTimeAmountKrw} KRW)
                     </span>
                   </div>                                    
                 </div>

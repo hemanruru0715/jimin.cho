@@ -97,6 +97,15 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       throw new Error(moxieEarningQueryError.message);
     }
 
+    //socialCapitalQueryData
+    const farScore = socialCapitalQueryData.Socials.Social[0].farcasterScore.farScore.toFixed(3);
+    const farBoost = socialCapitalQueryData.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
+    const farRank = socialCapitalQueryData.Socials.Social[0].farcasterScore.farRank.toFixed(0);
+
+    //moxieEarningQueryData
+    const todayAmount = moxieEarningQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    const weeklyAmount = moxieEarningQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    const lifeTimeAmount = moxieEarningQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
     //이미지URL 인코딩처리
     const encodedProfileImage = encodeURIComponent(data?.profileImage?.medium ?? "");
@@ -115,7 +124,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         ],
         image: { 
           src: `${NEXT_PUBLIC_URL}/api/og?profileName=${data?.profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
-                                         &followerCount=${data?.followerCount}&followingCount=${data?.followingCount}`,
+                                         &followerCount=${data?.followerCount}&followingCount=${data?.followingCount}
+                                         &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
+                                         &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}`,
           aspectRatio: '1:1',
         },
         //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
