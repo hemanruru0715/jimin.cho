@@ -153,52 +153,16 @@ import { ImageResponse } from "@vercel/og";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import fs from 'fs';
 import path from 'path';
+import { fetchCoinData } from '@/app/utils/fetchCoinData'; // utils 폴더에서 함수 가져오기
 
 //export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// woff 파일 경로
-const fontPath = path.join(process.cwd(), 'public/fonts/Roboto-Regular.ttf');
+// font 파일 경로
+const fontPath = path.join(process.cwd(), 'public/fonts/Poppins-Regular.ttf');
 const fontData = fs.readFileSync(fontPath);
-
-
-async function fetchCoinData() {
-  const { COINMARKETCAP_API_KEY } = process.env;
-
-  const responseMoxieUsd = await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=MOXIE&convert=USD`, {
-    headers: {
-      'X-CMC_PRO_API_KEY': COINMARKETCAP_API_KEY || '',
-    },
-  });
-
-  if (!responseMoxieUsd.ok) {
-    throw new Error('Failed to fetch coin data');
-  }
-
-  const dataMoxieUsd = await responseMoxieUsd.json();
-
-  const responseMoxieKrw = await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=MOXIE&convert=KRW`, {
-    headers: {
-      'X-CMC_PRO_API_KEY': COINMARKETCAP_API_KEY || '',
-    },
-  });
-
-  if (!responseMoxieKrw.ok) {
-    throw new Error('Failed to fetch coin data');
-  }
-
-  const dataMoxieKrw = await responseMoxieKrw.json();
-
-   console.warn("###dataMoxieUsd=" + JSON.stringify(dataMoxieUsd));
-  // console.warn("###dataMoxieKrw=" + JSON.stringify(dataMoxieKrw));
-
-  const moxieUsdPrice = dataMoxieUsd.data.MOXIE[0].quote.USD.price.toFixed(6);  // USD 가격
-  const moxieKrwPrice = dataMoxieKrw.data.MOXIE[0].quote.KRW.price.toFixed(2);  // KRW 가격 (소수점 제거)
-
-  return { moxieUsdPrice, moxieKrwPrice };
-}
 
 
 export async function GET(req: Request) {
@@ -251,7 +215,7 @@ export async function GET(req: Request) {
           textAlign: 'center',
           position: 'relative',
           border: '10px solid purple',
-          fontFamily: '"Roboto-Regular"', // 폰트 이름
+          fontFamily: '"Poppins-Regular"', // 폰트 이름
         }}
       >
           {/* 상단 정보 섹션 */}
@@ -275,7 +239,7 @@ export async function GET(req: Request) {
                 marginRight: '20px',
               }}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '40px', color: 'black' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '20px', color: 'black' }}>
               <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
               <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
             </div>
@@ -311,12 +275,12 @@ export async function GET(req: Request) {
            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <span>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold', color: 'black' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
-                      Moxie Price
+                      Moxie Price22
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold', color: 'black' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
                       {moxieUsdPrice} USD / {moxieKrwPrice} KRW
                     </span>
@@ -335,7 +299,7 @@ export async function GET(req: Request) {
                       FarScore
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       0.18
                     </span>
@@ -361,7 +325,7 @@ export async function GET(req: Request) {
                      Like 👍
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       2.22
                     </span>
@@ -387,7 +351,7 @@ export async function GET(req: Request) {
                       Today
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                        {todayMoxie}
                     </span>
@@ -411,7 +375,7 @@ export async function GET(req: Request) {
                       FarBoost
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       0.11
                     </span>
@@ -438,7 +402,7 @@ export async function GET(req: Request) {
                      Reply 💬
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       0.11
                     </span>
@@ -465,7 +429,7 @@ export async function GET(req: Request) {
                       Weekly
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       0.11
                     </span>
@@ -489,7 +453,7 @@ export async function GET(req: Request) {
                       FarRank
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       4228
                     </span>
@@ -515,7 +479,7 @@ export async function GET(req: Request) {
                       Rcast/Quote 🔄
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       4228
                     </span>
@@ -541,7 +505,7 @@ export async function GET(req: Request) {
                       Lifetime
                     </span>
                   </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       4228
                     </span>
@@ -573,7 +537,7 @@ export async function GET(req: Request) {
               padding: '0 20px', // Padding for left and right alignment
               fontSize: '24px', // Adjust font size as needed
               color: 'black',
-              fontFamily: '"Roboto-Regular"', // 폰트 이름
+              fontFamily: '"Poppins-Regular"', // 폰트 이름
             }}
           >
             {/* 시간 (ISO 8601 포맷) */}
@@ -590,7 +554,7 @@ export async function GET(req: Request) {
         height: 1200,
         fonts: [
           {
-            name: 'Roboto-Regular',
+            name: 'Poppins-Regular',
             data: fontData,
             weight: 400,
             style: 'normal',
@@ -624,7 +588,7 @@ export async function GET(req: Request) {
         height: 1200,
         fonts: [
           {
-            name: 'Roboto-Regular',
+            name: 'Poppins-Regular',
             data: fontData,
             weight: 400,
             style: 'normal',

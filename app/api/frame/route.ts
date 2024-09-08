@@ -31,25 +31,24 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     //파캐스터 유저정보
     const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
-    //console.warn("data=" + JSON.stringify(data));
+    //console.warn("getFarcasterUserDetails=" + JSON.stringify(data));
 
     if (error) throw new Error(error);
 
     const socialCapitalQuery = `
-    query GetFarcasterUserSocialCapital {
+    query MyQuery {
       Socials(
         input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "` + myFid + `"}}, blockchain: ethereum}
       ) {
         Social {
-          dappName
-          profileName
-          socialCapital {
-            socialCapitalScore
-            socialCapitalRank
-          }
           farcasterScore {
+            farScore
             farBoost
+            farRank
           }
+          profileDisplayName
+          profileName
+          userId
         }
       }
     }
