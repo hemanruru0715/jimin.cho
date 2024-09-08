@@ -239,7 +239,7 @@ export async function GET(req: Request) {
                 marginRight: '20px',
               }}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '20px', color: 'black' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '30px', color: 'black' }}>
               <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
               <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
             </div>
@@ -277,7 +277,7 @@ export async function GET(req: Request) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
-                      Moxie Price22
+                      Moxie Price1222
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
@@ -293,7 +293,7 @@ export async function GET(req: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'black' }}>
               <span>
               
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '170px', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '140px', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       FarScore
