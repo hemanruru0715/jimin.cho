@@ -177,40 +177,62 @@ export async function GET(req: Request) {
   const farScore = searchParams.get('farScore') ?? "";
   const farBoost = searchParams.get('farBoost') ?? "";
   const farRank = searchParams.get('farRank') ?? "";
+  const finalFarScore = parseFloat(farScore).toLocaleString();
+  const finalFarBoost = parseFloat(farBoost).toLocaleString();
+  const finalFarRank = parseFloat(farRank).toLocaleString();
 
   const todayAmount = searchParams.get('todayAmount') ?? "";
   const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
   const lifeTimeAmount = searchParams.get('lifeTimeAmount') ?? "";
+  const finalTodayAmount = parseFloat(todayAmount).toLocaleString();
+  const finalWeeklyAmount = parseFloat(weeklyAmount).toLocaleString();
+  const finalLifeTimeAmount = parseFloat(lifeTimeAmount).toLocaleString();
+
 
   console.warn("profileName=" + profileName);
   console.warn("fid=" + fid);
   // console.warn("farScore=" + farScore);
   // console.warn("farBoost=" + farBoost);
   // console.warn("farRank=" + farRank);
-  // console.warn("todayAmount=" + todayAmount);
-  // console.warn("weeklyAmount=" + weeklyAmount);
-  // console.warn("lifeTimeAmount=" + lifeTimeAmount);
+  // console.warn("finalTodayAmount=" + finalTodayAmount);
+  // console.warn("finalWeeklyAmount=" + finalWeeklyAmount);
+  // console.warn("finalLifeTimeAmount=" + finalLifeTimeAmount);
 
 
   let like  = 0;
   let reply = 0;
   let rcQt  = 0;
+  let finalLike = 'N/A';
+  let finalReply = 'N/A';
+  let finalRcQt = 'N/A';
 
   let likeUsd  = 0;
   let replyUsd = 0;
   let rcQtUsd  = 0;
+  let finalLikeUsd  = 'N/A';
+  let finalReplyUsd = 'N/A';
+  let finalRcQtUsd  = 'N/A';
 
   let likeKrw  = 0;
   let replyKrw = 0;
   let rcQtKrw  = 0;
+  let finalLikeKrw  = 'N/A';
+  let finalReplyKrw = 'N/A';
+  let finalRcQtKrw  = 'N/A';
 
   let todayAmountUsd    = 0;
   let weeklyAmountUsd   = 0;
   let lifeTimeAmountUsd = 0;
+  let finalTodayAmountUsd    = 'N/A';
+  let finalWeeklyAmountUsd   = 'N/A';
+  let finalLifeTimeAmountUsd = 'N/A';
 
   let todayAmountKrw    = 0;
   let weeklyAmountKrw   = 0;
   let lifeTimeAmountKrw = 0;
+  let finalTodayAmountKrw    = 'N/A';
+  let finalWeeklyAmountKrw   = 'N/A';
+  let finalLifeTimeAmountKrw = 'N/A';
 
   let moxieUsdPrice = 'N/A';
   let moxieKrwPrice = 'N/A';
@@ -224,37 +246,53 @@ export async function GET(req: Request) {
     console.warn("moxieKrwPrice=" + moxieKrwPrice);
 
     //화면 구성값 계산
-    like  = parseFloat(farScore) * 1;
+    like  = (parseFloat(farScore) * 1);
     reply = parseFloat((parseFloat(farScore) * 5).toFixed(3));
     rcQt  = parseFloat((parseFloat(farScore) * 10).toFixed(3));
+    finalLike  = like.toLocaleString();
+    finalReply = reply.toLocaleString();
+    finalRcQt  = rcQt.toLocaleString();
 
-    // console.warn("like=" + like);
-    // console.warn("reply=" + reply);
-    // console.warn("rcQt=" + rcQt);
+    // console.warn("finalLike=" + finalLike);
+    // console.warn("finalReply=" + finalReply);
+    // console.warn("finalRcQt=" + finalRcQt);
 
     likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4));
     replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));
     rcQtUsd  = parseFloat((rcQt * parseFloat(moxieUsdPrice)).toFixed(4));
+    finalLikeUsd  = likeUsd.toLocaleString();
+    finalReplyUsd = replyUsd.toLocaleString();
+    finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-    // console.warn("likeUsd=" + likeUsd);
-    // console.warn("replyUsd=" + replyUsd);
-    // console.warn("rcQtUsd=" + rcQtUsd);
+
+    // console.warn("finalLikeUsd=" + finalLikeUsd);
+    // console.warn("finalReplyUsd=" + finalReplyUsd);
+    // console.warn("finalRcQtUsd=" + finalRcQtUsd);
 
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
     replyKrw = parseFloat((reply * parseFloat(moxieKrwPrice)).toFixed(2));
     rcQtKrw  = parseFloat((rcQt * parseFloat(moxieKrwPrice)).toFixed(2));
+    finalLikeKrw = likeKrw.toLocaleString();
+    finalReplyKrw = replyKrw.toLocaleString();
+    finalRcQtKrw = rcQtKrw.toLocaleString();
 
-    // console.warn("likeKrw=" + likeKrw);
-    // console.warn("replyKrw=" + replyKrw);
-    // console.warn("rcQtKrw=" + rcQtKrw);
+    // console.warn("finalLikeKrw=" + finalLikeKrw);
+    // console.warn("finalReplyKrw=" + finalReplyKrw);
+    // console.warn("finalRcQtKrw=" + finalRcQtKrw);
 
-    todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
-    weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
-    lifeTimeAmountUsd = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
+    todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
+    weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
+    lifeTimeAmountUsd = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
+    finalTodayAmountUsd = todayAmountUsd.toLocaleString();
+    finalWeeklyAmountUsd = weeklyAmountUsd.toLocaleString();
+    finalLifeTimeAmountUsd = lifeTimeAmountUsd.toLocaleString();
 
-    todayAmountKrw    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
-    weeklyAmountKrw   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
-    lifeTimeAmountKrw = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieKrwPrice)).toFixed(2));
+    todayAmountKrw    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieKrwPrice)).toFixed(2).toLocaleString());
+    weeklyAmountKrw   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieKrwPrice)).toFixed(2).toLocaleString());
+    lifeTimeAmountKrw = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieKrwPrice)).toFixed(2).toLocaleString());
+    finalTodayAmountKrw = todayAmountKrw.toLocaleString();
+    finalWeeklyAmountKrw = weeklyAmountKrw.toLocaleString();
+    finalLifeTimeAmountKrw = lifeTimeAmountKrw.toLocaleString();
 
   } catch (error) {
     console.error('Error fetching MOXIE price:', error);
@@ -364,7 +402,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {farScore}
+                      {finalFarScore}
                     </span>
                   </div>
 
@@ -380,17 +418,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {like}
+                      {finalLike}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({likeUsd} USD)
+                      ({finalLikeUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({likeKrw} KRW)
+                      ({finalLikeKrw} KRW)
                     </span>
                   </div>
 
@@ -399,24 +437,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '88px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '87px' }}>
                     <span>
                       Today
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {todayAmount}
+                      {finalTodayAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({todayAmountUsd} USD)
+                      ({finalTodayAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({todayAmountKrw} KRW)
+                      ({finalTodayAmountKrw} KRW)
                     </span>
                   </div>
                 </div>
@@ -430,7 +468,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                    {farBoost}
+                    {finalFarBoost}
                     </span>
                   </div>
 
@@ -447,17 +485,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {reply} 
+                      {finalReply} 
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({replyUsd} USD)
+                      ({finalReplyUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({replyKrw} KRW)
+                      ({finalReplyKrw} KRW)
                     </span>
                   </div>
 
@@ -474,17 +512,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {weeklyAmount}
+                      {finalWeeklyAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({weeklyAmountUsd} USD)
+                      ({finalWeeklyAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({weeklyAmountKrw} KRW)
+                      ({finalWeeklyAmountKrw} KRW)
                     </span>
                   </div>
                 </div>
@@ -498,7 +536,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                    {farRank}
+                    {finalFarRank}
                     </span>
                   </div>
 
@@ -514,17 +552,17 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {rcQt}
+                      {finalRcQt}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                    ({rcQtUsd} USD)
+                    ({finalRcQtUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                    ({rcQtKrw} KRW)
+                    ({finalRcQtKrw} KRW)
                     </span>
                   </div>
 
@@ -533,24 +571,24 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '88px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '87px' }}>
                     <span>
                       Lifetime
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {lifeTimeAmount}
+                      {finalLifeTimeAmount}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({lifeTimeAmountUsd} USD)
+                      ({finalLifeTimeAmountUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({lifeTimeAmountKrw} KRW)
+                      ({finalLifeTimeAmountKrw} KRW)
                     </span>
                   </div>                                    
                 </div>
