@@ -257,10 +257,10 @@ export async function GET(req: Request) {
     // console.warn("finalReply=" + finalReply);
     // console.warn("finalRcQt=" + finalRcQt);
 
-    likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4)); //finalLikeUsd 시 0이 나와서 임시 likeUsd로 화면에 보여줌
+    likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(5)); //finalLikeUsd 시 0이 나와서 임시 likeUsd로 화면에 보여줌
     replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));
     rcQtUsd  = parseFloat((rcQt * parseFloat(moxieUsdPrice)).toFixed(4));
-    finalLikeUsd  = likeUsd.toLocaleString();
+    //finalLikeUsd  = likeUsd.toLocaleString();
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
@@ -379,7 +379,7 @@ export async function GET(req: Request) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
-                      Moxie Price
+                      Moxie Price22
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
