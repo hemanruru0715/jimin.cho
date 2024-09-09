@@ -379,7 +379,7 @@ export async function GET(req: Request) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
                     <span>
-                      Moxie Price22
+                      Moxie Price
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
