@@ -246,7 +246,7 @@ export async function GET(req: Request) {
     console.warn("moxieKrwPrice=" + moxieKrwPrice);
 
     //화면 구성값 계산
-    like  = (parseFloat(farScore) * 1);
+    like  = parseFloat(farScore) * 1;
     reply = parseFloat((parseFloat(farScore) * 5).toFixed(3));
     rcQt  = parseFloat((parseFloat(farScore) * 10).toFixed(3));
     finalLike  = like.toLocaleString();
@@ -264,10 +264,10 @@ export async function GET(req: Request) {
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-    console.warn("likeUsd=" + likeUsd);
-    console.warn("finalLikeUsd=" + finalLikeUsd);
-    console.warn("replyUsd=" + replyUsd);
-    console.warn("finalReplyUsd=" + finalReplyUsd);
+    console.log("likeUsd=" + likeUsd);
+    console.log("finalLikeUsd=" + finalLikeUsd);
+    console.log("replyUsd=" + replyUsd);
+    console.log("finalReplyUsd=" + finalReplyUsd);
     // console.warn("finalRcQtUsd=" + finalRcQtUsd);
 
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
