@@ -253,20 +253,21 @@ export async function GET(req: Request) {
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
 
-    // console.warn("finalLike=" + finalLike);
+     console.warn("finalLike=" + finalLike);
     // console.warn("finalReply=" + finalReply);
     // console.warn("finalRcQt=" + finalRcQt);
 
-    likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4));
+    likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4)); //finalLikeUsd 시 0이 나와서 임시 likeUsd로 화면에 보여줌
     replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));
     rcQtUsd  = parseFloat((rcQt * parseFloat(moxieUsdPrice)).toFixed(4));
     finalLikeUsd  = likeUsd.toLocaleString();
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-
-    // console.warn("finalLikeUsd=" + finalLikeUsd);
-    // console.warn("finalReplyUsd=" + finalReplyUsd);
+    console.warn("likeUsd=" + likeUsd);
+    console.warn("finalLikeUsd=" + finalLikeUsd);
+    console.warn("replyUsd=" + replyUsd);
+    console.warn("finalReplyUsd=" + finalReplyUsd);
     // console.warn("finalRcQtUsd=" + finalRcQtUsd);
 
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
@@ -423,7 +424,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
                     <span>
-                      ({finalLikeUsd} USD)
+                      ({likeUsd} USD)
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
