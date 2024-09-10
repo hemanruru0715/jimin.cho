@@ -30,85 +30,134 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const input: FarcasterUserDetailsInput = { fid: myFid };
 
     //파캐스터 유저정보
-    const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
+    //const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
     //console.warn("getFarcasterUserDetails=" + JSON.stringify(data));
 
-    if (error) throw new Error(error);
+    //if (error) throw new Error(error);
 
-    const socialCapitalQuery = `
-    query MyQuery {
-      Socials(
-        input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "` + myFid + `"}}, blockchain: ethereum}
-      ) {
-        Social {
-          farcasterScore {
-            farScore
-            farBoost
-            farRank
+   const socialCapitalQuery = `
+          query MyQuery {
+            Socials(
+              input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "` + myFid + `"}}, blockchain: ethereum}
+            ) {
+              Social {
+                farcasterScore {
+                  farScore
+                  farBoost
+                  farRank
+                }
+                profileDisplayName
+                profileName
+                userId
+                profileImage
+                profileImageContentValue {
+                  image {
+                    medium
+                  }
+                }
+              }
+            }
+            today: FarcasterMoxieEarningStats(
+              input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "` + myFid + `"}}, timeframe: TODAY, blockchain: ALL}
+            ) {
+              FarcasterMoxieEarningStat {
+                allEarningsAmount
+              }
+            }
+            weekly: FarcasterMoxieEarningStats(
+              input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "` + myFid + `"}}, timeframe: WEEKLY, blockchain: ALL}
+            ) {
+              FarcasterMoxieEarningStat {
+                allEarningsAmount
+              }
+            }
+            allTime: FarcasterMoxieEarningStats(
+              input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "` + myFid + `"}}, timeframe: LIFETIME, blockchain: ALL}
+            ) {
+              FarcasterMoxieEarningStat {
+                allEarningsAmount
+              }
+            }
           }
-          profileDisplayName
-          profileName
-          userId
-        }
-      }
-    }
-    `;
+       `;
 
-    const moxieEarningQuery = `
-    query MyQuery {
-      today: FarcasterMoxieEarningStats(
-        input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: TODAY, blockchain: ALL}
-      ) {
-        FarcasterMoxieEarningStat {
-          allEarningsAmount
-        }
-      }
-      weekly: FarcasterMoxieEarningStats(
-        input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: WEEKLY, blockchain: ALL}
-      ) {
-        FarcasterMoxieEarningStat {
-          allEarningsAmount
-        }
-      }
-      allTime: FarcasterMoxieEarningStats(
-        input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: LIFETIME, blockchain: ALL}
-      ) {
-        FarcasterMoxieEarningStat {
-          allEarningsAmount
-        }
-      }
-    }
-    `;
+    // const socialCapitalQuery = `
+    // query MyQuery {
+    //   Socials(
+    //     input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "` + myFid + `"}}, blockchain: ethereum}
+    //   ) {
+    //     Social {
+    //       farcasterScore {
+    //         farScore
+    //         farBoost
+    //         farRank
+    //       }
+    //       profileDisplayName
+    //       profileName
+    //       userId
+    //     }
+    //   }
+    // }
+    // `;
+
+    // const moxieEarningQuery = `
+    // query MyQuery {
+    //   today: FarcasterMoxieEarningStats(
+    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: TODAY, blockchain: ALL}
+    //   ) {
+    //     FarcasterMoxieEarningStat {
+    //       allEarningsAmount
+    //     }
+    //   }
+    //   weekly: FarcasterMoxieEarningStats(
+    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: WEEKLY, blockchain: ALL}
+    //   ) {
+    //     FarcasterMoxieEarningStat {
+    //       allEarningsAmount
+    //     }
+    //   }
+    //   allTime: FarcasterMoxieEarningStats(
+    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: LIFETIME, blockchain: ALL}
+    //   ) {
+    //     FarcasterMoxieEarningStat {
+    //       allEarningsAmount
+    //     }
+    //   }
+    // }
+    // `;
 
     const { data: socialCapitalQueryData, error: socialCapitalQueryError } = await fetchQuery(socialCapitalQuery);
-    //console.warn("socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
-    //console.warn("socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
+    console.warn("11socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
+    console.warn("11socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
 
     if (socialCapitalQueryError) {
       throw new Error(socialCapitalQueryError.message);
     }
   
 
-    const { data: moxieEarningQueryData, error: moxieEarningQueryError } = await fetchQuery(moxieEarningQuery);
-    //console.warn("quemoxieEarningQueryDataryData=" + JSON.stringify(moxieEarningQueryData));
-    //console.warn("moxieEarningQueryError=" + JSON.stringify(moxieEarningQueryError));
+    // const { data: moxieEarningQueryData, error: moxieEarningQueryError } = await fetchQuery(moxieEarningQuery);
+    // console.warn("moxieEarningQueryData=" + JSON.stringify(moxieEarningQueryData));
+    // console.warn("moxieEarningQueryData=" + JSON.stringify(moxieEarningQueryError));
 
-    if (moxieEarningQueryError) {
-      throw new Error(moxieEarningQueryError.message);
-    }
+    // if (moxieEarningQueryError) {
+    //   throw new Error(moxieEarningQueryError.message);
+    // }
 
     //socialCapitalQueryData
     const farScore = socialCapitalQueryData.Socials.Social[0].farcasterScore.farScore.toFixed(3);
     const farBoost = socialCapitalQueryData.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
     const farRank = socialCapitalQueryData.Socials.Social[0].farcasterScore.farRank.toFixed(0);
+    const todayAmount = socialCapitalQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    const weeklyAmount = socialCapitalQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    const lifeTimeAmount = socialCapitalQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
     //moxieEarningQueryData
-    const todayAmount = moxieEarningQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    const weeklyAmount = moxieEarningQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    const lifeTimeAmount = moxieEarningQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // const todayAmount = moxieEarningQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // const weeklyAmount = moxieEarningQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // const lifeTimeAmount = moxieEarningQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
     //이미지URL 인코딩처리
-    const encodedProfileImage = encodeURIComponent(data?.profileImage?.medium ?? "");
+    const encodedProfileImage = encodeURIComponent(socialCapitalQueryData.Socials.Social[0].profileImage);
 
     return new NextResponse(
       getFrameHtmlResponse({
@@ -123,8 +172,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           },
         ],
         image: { 
-          src: `${NEXT_PUBLIC_URL}/api/og?profileName=${data?.profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
-                                         &followerCount=${data?.followerCount}&followingCount=${data?.followingCount}
+          src: `${NEXT_PUBLIC_URL}/api/og?profileName=${socialCapitalQueryData.Socials.Social[0].farcasterScore.profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}`,
           aspectRatio: '1:1',
