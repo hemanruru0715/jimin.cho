@@ -172,7 +172,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           },
         ],
         image: { 
-          src: `${NEXT_PUBLIC_URL}/api/og?profileName=${socialCapitalQueryData.Socials.Social[0].farcasterScore.profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
+          src: `${NEXT_PUBLIC_URL}/api/og?profileName=${socialCapitalQueryData.Socials.Social[0].profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}`,
           aspectRatio: '1:1',
