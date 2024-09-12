@@ -81,51 +81,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           }
        `;
 
-    // const socialCapitalQuery = `
-    // query MyQuery {
-    //   Socials(
-    //     input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "` + myFid + `"}}, blockchain: ethereum}
-    //   ) {
-    //     Social {
-    //       farcasterScore {
-    //         farScore
-    //         farBoost
-    //         farRank
-    //       }
-    //       profileDisplayName
-    //       profileName
-    //       userId
-    //     }
-    //   }
-    // }
-    // `;
-
-    // const moxieEarningQuery = `
-    // query MyQuery {
-    //   today: FarcasterMoxieEarningStats(
-    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: TODAY, blockchain: ALL}
-    //   ) {
-    //     FarcasterMoxieEarningStat {
-    //       allEarningsAmount
-    //     }
-    //   }
-    //   weekly: FarcasterMoxieEarningStats(
-    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: WEEKLY, blockchain: ALL}
-    //   ) {
-    //     FarcasterMoxieEarningStat {
-    //       allEarningsAmount
-    //     }
-    //   }
-    //   allTime: FarcasterMoxieEarningStats(
-    //     input: {filter: {entityType: {_eq: USER}, entityId: {_eq: "`+ myFid +`"}}, timeframe: LIFETIME, blockchain: ALL}
-    //   ) {
-    //     FarcasterMoxieEarningStat {
-    //       allEarningsAmount
-    //     }
-    //   }
-    // }
-    // `;
-
     const { data: socialCapitalQueryData, error: socialCapitalQueryError } = await fetchQuery(socialCapitalQuery);
     console.warn("11socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
     console.warn("11socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
@@ -133,15 +88,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     if (socialCapitalQueryError) {
       throw new Error(socialCapitalQueryError.message);
     }
-  
-
-    // const { data: moxieEarningQueryData, error: moxieEarningQueryError } = await fetchQuery(moxieEarningQuery);
-    // console.warn("moxieEarningQueryData=" + JSON.stringify(moxieEarningQueryData));
-    // console.warn("moxieEarningQueryData=" + JSON.stringify(moxieEarningQueryError));
-
-    // if (moxieEarningQueryError) {
-    //   throw new Error(moxieEarningQueryError.message);
-    // }
 
     //socialCapitalQueryData
     const farScore = socialCapitalQueryData.Socials.Social[0].farcasterScore.farScore.toFixed(3);
@@ -150,11 +96,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const todayAmount = socialCapitalQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
     const weeklyAmount = socialCapitalQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
     const lifeTimeAmount = socialCapitalQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-
-    //moxieEarningQueryData
-    // const todayAmount = moxieEarningQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    // const weeklyAmount = moxieEarningQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    // const lifeTimeAmount = moxieEarningQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
     //이미지URL 인코딩처리
     const encodedProfileImage = encodeURIComponent(socialCapitalQueryData.Socials.Social[0].profileImage);
