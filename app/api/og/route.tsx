@@ -247,15 +247,15 @@ export async function GET(req: Request) {
 
     //화면 구성값 계산
     like  = parseFloat(farScore) * 1;
-    reply = parseFloat((parseFloat(farScore) * 5).toFixed(3));
-    rcQt  = parseFloat((parseFloat(farScore) * 10).toFixed(3));
+    reply = parseFloat((parseFloat(farScore) * 3).toFixed(3));
+    rcQt  = parseFloat((parseFloat(farScore) * 6).toFixed(3));
     finalLike  = like.toLocaleString();
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
 
      console.warn("finalLike=" + finalLike);
-    // console.warn("finalReply=" + finalReply);
-    // console.warn("finalRcQt=" + finalRcQt);
+     console.warn("finalReply=" + finalReply);
+     console.warn("finalRcQt=" + finalRcQt);
 
     likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4)); //finalLikeUsd 시 0이 나와서 임시 likeUsd로 화면에 보여줌
     replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));

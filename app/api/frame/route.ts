@@ -82,8 +82,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
        `;
 
     const { data: socialCapitalQueryData, error: socialCapitalQueryError } = await fetchQuery(socialCapitalQuery);
-    console.warn("11socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
-    console.warn("11socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
+    // console.warn("11socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
+    // console.warn("11socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
 
     if (socialCapitalQueryError) {
       throw new Error(socialCapitalQueryError.message);
