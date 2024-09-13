@@ -24,7 +24,7 @@ export async function GET() {
           fontFamily: '"Recipekorea"', // 폰트 이름
           backgroundColor: 'white',
           //backgroundImage: 'linear-gradient(to bottom, #dbf4ff, #fff1f1)',
-          backgroundImage: `url(${NEXT_PUBLIC_URL}/thanksgiving_day.jpg?v=1)`,
+          backgroundImage: `url(${NEXT_PUBLIC_URL}/thanksgiving_day.png?v=1)`,
           color: 'black',
           padding: '40px',
         }}
