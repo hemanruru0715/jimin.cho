@@ -118,7 +118,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}`,
           aspectRatio: '1:1',
         },
-        //image: { src: `${NEXT_PUBLIC_URL}/park-3.png` },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
         //state: { time: new Date().toISOString() },
       })

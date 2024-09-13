@@ -264,10 +264,10 @@ export async function GET(req: Request) {
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-    console.log("likeUsd=" + likeUsd);
-    console.log("finalLikeUsd=" + finalLikeUsd);
-    console.log("replyUsd=" + replyUsd);
-    console.log("finalReplyUsd=" + finalReplyUsd);
+    // console.log("likeUsd=" + likeUsd);
+    // console.log("finalLikeUsd=" + finalLikeUsd);
+    // console.log("replyUsd=" + replyUsd);
+    // console.log("finalReplyUsd=" + finalReplyUsd);
     // console.warn("finalRcQtUsd=" + finalRcQtUsd);
 
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
