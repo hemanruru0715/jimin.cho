@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'hemanruru.vercel.app',
     description: 'Check the MOXIE stats',
-     images: [`${NEXT_PUBLIC_URL}/thanksgiving_day.jpg`],
+     images: [`${NEXT_PUBLIC_URL}/thanksgiving_day.png`],
   },
   other: {
     ...frameMetadata,
