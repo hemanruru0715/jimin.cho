@@ -170,8 +170,6 @@ export async function GET(req: Request) {
 
   const profileName = searchParams.get('profileName');
   const fid = searchParams.get('fid');
-  const followerCount = searchParams.get('followerCount');
-  const followingCount = searchParams.get('followingCount');
   const profileImage = searchParams.get('profileImage') || `${NEXT_PUBLIC_URL}/default-image.png`;
 
   const farScore = searchParams.get('farScore') ?? "";
