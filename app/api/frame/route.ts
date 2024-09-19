@@ -388,9 +388,9 @@ export async function GET(req: NextRequest) {
     today_amount: data.today_amount,
     weekly_amount: data.weekly_amount,
     lifetime_amount: data.lifetime_amount,
-    reply_count: data.replyCount,
-    recast_count: data.recastCount,
-    quote_count:  data.quoteCount,
+    reply_count: data.reply_count,
+    recast_count: data.recast_count,
+    quote_count:  data.quote_count,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
