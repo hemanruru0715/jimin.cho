@@ -36,7 +36,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     if (!isValid) {
       return new NextResponse('Message not valid', { status: 500 });
     }
-    const myFid = Number(message?.data?.fid) || 0;
+    let myFid = Number(message?.data?.fid) || 0;
     const input: FarcasterUserDetailsInput = { fid: myFid };
 
     //파캐스터 유저정보
@@ -135,14 +135,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
           fetchQuery(socialCapitalQuery),
 
-          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=300&reverse=true`, {
+          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=350&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
             },
           }),
 
-          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=150&reverse=true`, {
+          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=170&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
@@ -172,12 +172,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         todayDate.setUTCHours(0, 0, 0, 0);
         const differenceInMillis = todayDate.getTime() - referenceDate.getTime();
         const differenceInSeconds = Math.floor(differenceInMillis / 1000);
-        //console.log(`The difference in seconds is: ${differenceInSeconds}`);
-    
+        //console.warn("castsResponse=" + JSON.stringify(castsResponse.data));
+
         // castsResponse에서 reply 메시지 필터링
         const filteredReplyMessages = castsResponse.data.messages.filter(
-          (message: { data: { castAddBody: { parentCastId: any }; timestamp: any } }) =>
-            message.data.castAddBody.parentCastId && message.data.timestamp > differenceInSeconds
+          (message: { data: { castAddBody: {parentCastId: any }; 
+                              timestamp: any } }
+          ) => message.data.castAddBody !== undefined && message.data.castAddBody.parentCastId && message.data.timestamp > differenceInSeconds
         );
         //console.warn("filteredReplyMessages=" + JSON.stringify(filteredReplyMessages));
         replyCount = filteredReplyMessages.length;
