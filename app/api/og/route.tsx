@@ -1,154 +1,3 @@
-// import { ImageResponse } from "@vercel/og";
-// //import { NEXT_PUBLIC_URL } from "../../config";
-// import { NEXT_PUBLIC_URL } from '@/app/config';
-
-// //export const runtime = "edge";
-// export const dynamic = "force-dynamic";
-
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-// //const GRAPHQL_ENDPOINT = `https://gateway-arbitrum.network.thegraph.com/api/${process.env.THE_GRAPH_API_KEY}/subgraphs/id/2hTKKMwLsdfJm9N7gUeajkgg8sdJwky56Zpkvg8ZcyP8`;
-
-// // const noCacheFetch = async (url: string, options: RequestInit) =>
-// //   fetch(url, options);
-
-// export async function GET(req: Request) {
-// //   const document = gql`
-// //     {
-// //       sales(orderBy: timestamp, orderDirection: desc, first: 1) {
-// //         amount
-// //         timestamp
-// //         nft {
-// //           tokenId
-// //           ... on Punk {
-// //             id
-// //             metadata {
-// //               contractURI
-// //               id
-// //               tokenId
-// //               tokenURI
-// //               svg
-// //               traits {
-// //                 id
-// //                 type
-// //               }
-// //             }
-// //           }
-// //         }
-// //       }
-// //     }
-// //   `;
-
-// //   const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {
-// //     fetch,
-// //     cache: "no-store",
-// //   });
-
-
-// //   const response: any = await graphQLClient.request(document);
-
-// //   console.warn("!!!!!!!!!!!!!!!!document=" + JSON.stringify(document));
-
-//   const { searchParams } = new URL(req.url);
-  
-//   const fid = searchParams.get('fid');
-//   const followerCount = searchParams.get('followerCount');
-//   const followingCount = searchParams.get('followingCount');
-//   const profileImage = searchParams.get('profileImage') || `${NEXT_PUBLIC_URL}/default-image.png`;
-
-//   if (true) {
-//     return new ImageResponse(
-//         (
-//             <div
-//               style={{
-//                 fontSize: 60,
-//                 color: "white",
-//                 background: "#638596",
-//                 width: "100%",
-//                 height: "100%",
-//                 // padding: "0px 200px",
-//                 textAlign: "center",
-//                 display: "flex",
-//                 justifyContent: "center",
-//                 alignItems: "center",
-//                 position: "relative",
-//               }}
-//             >
-//               <img
-//                 src={`${NEXT_PUBLIC_URL}/park-3.png`}
-//                 //src={profileImage}
-//                 height="400"
-//                 width="400"
-//                 style={{
-//                   position: "absolute",
-//                   top: 0,
-//                   left: 0,
-//                   width: "100%",
-//                   height: "100%",
-//                   objectFit: "cover",
-//                 }}
-//               />
-//               <div
-//                 style={{
-//                   position: "absolute",
-//                   top: 0,
-//                   left: 0,
-//                   width: "100%",
-//                   height: "100%",
-//                   display: "flex",
-//                   flexDirection: "column",
-//                   justifyContent: "center",
-//                   alignItems: "center",
-//                   textAlign: "center",
-//                   zIndex: 1,
-//                 }}
-//               >
-//                 <div style={{ marginBottom: "10px", display: "flex" }}>
-//                   fid: {fid}
-//                 </div>
-//                 <div style={{ marginBottom: "10px", display: "flex" }}>
-//                 followerCount: {followerCount} / followingCount: {followingCount}
-//                 </div>
-//                 <div style={{ marginTop: "100px", display: "flex", fontSize: "50px" }}>
-//                   Last Update: {new Date().toISOString()}
-//                 </div>
-//               </div>
-//             </div>
-//           ),
-//       {
-//         width: 1200,
-//         height: 630,
-//       }
-//     );
-//   } else {
-//     return new ImageResponse(
-//       (
-//         <div
-//           style={{
-//             fontSize: 40,
-//             color: "black",
-//             background: "white",
-//             width: "100%",
-//             height: "100%",
-//             padding: "50px 200px",
-//             textAlign: "center",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             display: "flex",
-//           }}
-//         >
-//           Error fetching data :(. Please try again later.
-//         </div>
-//       ),
-//       {
-//         width: 1200,
-//         height: 630,
-//       }
-//     );
-//   }
-// }
-
-
 import { ImageResponse } from "@vercel/og";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import fs from 'fs';
@@ -186,6 +35,10 @@ export async function GET(req: Request) {
   const finalWeeklyAmount = parseFloat(weeklyAmount).toLocaleString();
   const finalLifeTimeAmount = parseFloat(lifeTimeAmount).toLocaleString();
 
+  const replyCount = searchParams.get('replyCount') ?? "";
+  const recastCount = searchParams.get('recastCount') ?? "";
+  const quoteCount = searchParams.get('quoteCount') ?? "";
+
 
   console.warn("profileName=" + profileName);
   console.warn("fid=" + fid);
@@ -195,6 +48,7 @@ export async function GET(req: Request) {
   // console.warn("finalTodayAmount=" + finalTodayAmount);
   // console.warn("finalWeeklyAmount=" + finalWeeklyAmount);
   // console.warn("finalLifeTimeAmount=" + finalLifeTimeAmount);
+  console.warn("Count=" + replyCount +  " / " + recastCount + " / " + quoteCount);
 
 
   let like  = 0;
@@ -232,6 +86,9 @@ export async function GET(req: Request) {
   let finalWeeklyAmountKrw   = 'N/A';
   let finalLifeTimeAmountKrw = 'N/A';
 
+  let finalReplyCount = 0;
+  let finalRcQtCount = 0;
+
   let moxieUsdPrice = 'N/A';
   let moxieKrwPrice = 'N/A';
 
@@ -239,9 +96,6 @@ export async function GET(req: Request) {
     const { moxieUsdPrice: usdPrice, moxieKrwPrice: krwPrice } = await fetchCoinData();
     moxieUsdPrice = parseFloat(usdPrice).toLocaleString('en-US', { minimumFractionDigits: 5 });
     moxieKrwPrice = parseFloat(krwPrice).toLocaleString('ko-KR');
-
-    console.warn("moxieUsdPrice=" + moxieUsdPrice);
-    console.warn("moxieKrwPrice=" + moxieKrwPrice);
 
     //화면 구성값 계산
     like  = parseFloat(farScore) * 1;
@@ -251,10 +105,6 @@ export async function GET(req: Request) {
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
 
-     console.warn("finalLike=" + finalLike);
-     console.warn("finalReply=" + finalReply);
-     console.warn("finalRcQt=" + finalRcQt);
-
     likeUsd  = parseFloat((like * parseFloat(moxieUsdPrice)).toFixed(4)); //finalLikeUsd 시 0이 나와서 임시 likeUsd로 화면에 보여줌
     replyUsd = parseFloat((reply * parseFloat(moxieUsdPrice)).toFixed(4));
     rcQtUsd  = parseFloat((rcQt * parseFloat(moxieUsdPrice)).toFixed(4));
@@ -262,22 +112,13 @@ export async function GET(req: Request) {
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-    // console.log("likeUsd=" + likeUsd);
-    // console.log("finalLikeUsd=" + finalLikeUsd);
-    // console.log("replyUsd=" + replyUsd);
-    // console.log("finalReplyUsd=" + finalReplyUsd);
-    // console.warn("finalRcQtUsd=" + finalRcQtUsd);
-
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
     replyKrw = parseFloat((reply * parseFloat(moxieKrwPrice)).toFixed(2));
     rcQtKrw  = parseFloat((rcQt * parseFloat(moxieKrwPrice)).toFixed(2));
     finalLikeKrw = likeKrw.toLocaleString();
     finalReplyKrw = replyKrw.toLocaleString();
     finalRcQtKrw = rcQtKrw.toLocaleString();
-
-    // console.warn("finalLikeKrw=" + finalLikeKrw);
-    // console.warn("finalReplyKrw=" + finalReplyKrw);
-    // console.warn("finalRcQtKrw=" + finalRcQtKrw);
+    
 
     todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
     weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
@@ -292,6 +133,9 @@ export async function GET(req: Request) {
     finalTodayAmountKrw = todayAmountKrw.toLocaleString();
     finalWeeklyAmountKrw = weeklyAmountKrw.toLocaleString();
     finalLifeTimeAmountKrw = lifeTimeAmountKrw.toLocaleString();
+
+    finalReplyCount = parseFloat(replyCount);
+    finalRcQtCount = parseFloat(recastCount) + parseFloat(quoteCount);
 
   } catch (error) {
     console.error('Error fetching MOXIE price:', error);
@@ -405,12 +249,13 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
+                      ( ∞ )
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                      Like 👍
                     </span>
@@ -473,7 +318,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      Engagement Value
+                      ({finalReplyCount}/300)
                     </span>
                   </div>
 
@@ -539,12 +384,13 @@ export async function GET(req: Request) {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
+                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
+                      ({finalRcQtCount}/150)
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
+                  <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
                       Rc/Qt 🔄
                     </span>

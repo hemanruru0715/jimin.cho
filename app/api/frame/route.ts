@@ -7,6 +7,7 @@ import { fetchQuery } from "@airstack/node";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import { config } from "dotenv";
 import { createClient } from '@supabase/supabase-js';
+import axios from "axios";
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 export const dynamic = 'force-dynamic';
@@ -41,7 +42,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     //파캐스터 유저정보
     //const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
     //console.warn("getFarcasterUserDetails=" + JSON.stringify(data));
-
     //if (error) throw new Error(error);
 
    const socialCapitalQuery = `
@@ -90,23 +90,142 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           }
        `;
 
-    const { data: socialCapitalQueryData, error: socialCapitalQueryError } = await fetchQuery(socialCapitalQuery);
+    //const { data: socialCapitalQueryData, error: socialCapitalQueryError } = await fetchQuery(socialCapitalQuery);
     // console.warn("11socialCapitalQueryData=" + JSON.stringify(socialCapitalQueryData));
     // console.warn("11socialCapitalQueryError=" + JSON.stringify(socialCapitalQueryError));
+    // if (socialCapitalQueryError) {
+    //   throw new Error(socialCapitalQueryError.message);
+    // }
 
-    if (socialCapitalQueryError) {
-      throw new Error(socialCapitalQueryError.message);
-    }
+    const quoteRecastsQuery = `
+        query MyQuery {
+          quoteRecasts: FarcasterQuotedRecasts(
+            input: {filter: {recastedBy: {_eq: "fc_fid:`+ myFid +`"}}, blockchain: ALL}
+          ) {
+            QuotedRecast {
+              castedAtTimestamp
+              url
+            }
+          }
+        }
+      `;
+
+
+    let profileName = '';
+    let profileImage = '';
+    let farScore = 0;
+    let farBoost = 0;
+    let farRank = 0;
+    let todayAmount = 0;
+    let weeklyAmount = 0;
+    let lifeTimeAmount = 0;
+    
+    let replyCount = 0;
+    let recastCount = 0;
+    let quoteCount = 0;
+
+     // 데이터 처리 함수 호출 후 그 결과를 기다림
+    await main(myFid, socialCapitalQuery, quoteRecastsQuery);
+
+    //const main = async () => {
+    async function main(myFid: number, socialCapitalQuery: string, quoteRecastsQuery: string) {
+      const server = "https://hubs.airstack.xyz";
+      try {
+        // API 요청을 병렬로 실행
+        const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
+          fetchQuery(socialCapitalQuery),
+
+          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=300&reverse=true`, {
+            headers: {
+              "Content-Type": "application/json",
+              "x-airstack-hubs": apiKey as string,
+            },
+          }),
+
+          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=150&reverse=true`, {
+            headers: {
+              "Content-Type": "application/json",
+              "x-airstack-hubs": apiKey as string,
+            },
+          }),
+
+          fetchQuery(quoteRecastsQuery)
+        ]);
+    
+
+
+        //socialCapitalQueryData
+        const data = socialCapitalQueryData.data;
+        profileName = data.Socials.Social[0].profileName;
+        profileImage = data.Socials.Social[0].profileImage;
+        farScore = data.Socials.Social[0].farcasterScore.farScore.toFixed(3);
+        farBoost = data.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
+        farRank = data.Socials.Social[0].farcasterScore.farRank.toFixed(0);
+        todayAmount = data.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+        weeklyAmount = data.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+        lifeTimeAmount = data.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+
+
+        // 날짜 계산 로직
+        const referenceDate = new Date(Date.UTC(2021, 0, 1, 0, 0, 0));
+        const todayDate = new Date();
+        todayDate.setUTCHours(0, 0, 0, 0);
+        const differenceInMillis = todayDate.getTime() - referenceDate.getTime();
+        const differenceInSeconds = Math.floor(differenceInMillis / 1000);
+        //console.log(`The difference in seconds is: ${differenceInSeconds}`);
+    
+        // castsResponse에서 reply 메시지 필터링
+        const filteredReplyMessages = castsResponse.data.messages.filter(
+          (message: { data: { castAddBody: { parentCastId: any }; timestamp: any } }) =>
+            message.data.castAddBody.parentCastId && message.data.timestamp > differenceInSeconds
+        );
+        //console.warn("filteredReplyMessages=" + JSON.stringify(filteredReplyMessages));
+        replyCount = filteredReplyMessages.length;
+        console.warn("replyCount=" + replyCount);
+    
+
+        // reactionsResponse에서 recast 메시지 필터링
+        const filteredRecastMessages = reactionsResponse.data.messages.filter(
+          (message: { data: { timestamp: any } }) =>
+            message.data.timestamp > differenceInSeconds
+        );
+        //console.warn("filteredRecastMessages=" + JSON.stringify(filteredRecastMessages));
+        recastCount = filteredRecastMessages.length;
+        console.warn("recastCount=" + recastCount);
+
+
+        // quoteRecastsQueryData에서 quote 메시지 필터링
+        const todayStart = new Date().setUTCHours(0, 0, 0, 0);
+        console.warn("todayStart=" + todayStart);
+
+        const filteredQuoteMessages = quoteRecastsQueryData.data.quoteRecasts.QuotedRecast.filter(
+          (  item: { castedAtTimestamp: string | number | Date; }) => {
+              const castedAt = new Date(item.castedAtTimestamp).getTime();
+              return castedAt >= todayStart;
+          });
+
+        //console.warn("filteredQuoteMessages=" + JSON.stringify(filteredQuoteMessages));
+        quoteCount = filteredQuoteMessages.length;
+        console.warn("quoteCount=" + quoteCount);
+
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    
+    //main();
+
+
 
     //socialCapitalQueryData
-    const profileName = socialCapitalQueryData.Socials.Social[0].profileName;
-    const profileImage = socialCapitalQueryData.Socials.Social[0].profileImage;
-    const farScore = socialCapitalQueryData.Socials.Social[0].farcasterScore.farScore.toFixed(3);
-    const farBoost = socialCapitalQueryData.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
-    const farRank = socialCapitalQueryData.Socials.Social[0].farcasterScore.farRank.toFixed(0);
-    const todayAmount = socialCapitalQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    const weeklyAmount = socialCapitalQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
-    const lifeTimeAmount = socialCapitalQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // profileName = socialCapitalQueryData.Socials.Social[0].profileName;
+    // profileImage = socialCapitalQueryData.Socials.Social[0].profileImage;
+    // farScore = socialCapitalQueryData.Socials.Social[0].farcasterScore.farScore.toFixed(3);
+    // farBoost = socialCapitalQueryData.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
+    // farRank = socialCapitalQueryData.Socials.Social[0].farcasterScore.farRank.toFixed(0);
+    // todayAmount = socialCapitalQueryData.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // weeklyAmount = socialCapitalQueryData.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+    // lifeTimeAmount = socialCapitalQueryData.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
     //이미지URL 인코딩처리
     const encodedProfileImage = encodeURIComponent(profileImage);
@@ -139,6 +258,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           today_amount: todayAmount,
           weekly_amount: weeklyAmount,
           lifetime_amount: lifeTimeAmount,
+          reply_count: replyCount,
+          recast_count: recastCount,
+          quote_count:  quoteCount,
           mod_dtm: getKoreanISOString()
         })
         .eq('fid', myFid);
@@ -162,6 +284,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             today_amount: todayAmount,
             weekly_amount: weeklyAmount,
             lifetime_amount: lifeTimeAmount,
+            reply_count: replyCount,
+            recast_count: recastCount,
+            quote_count:  quoteCount,
             reg_dtm: getKoreanISOString()
           }
         ]);
@@ -191,6 +316,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           src: `${NEXT_PUBLIC_URL}/api/og?profileName=${profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}
+                                         &replyCount=${replyCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
                                          &cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
         },
@@ -234,6 +360,9 @@ export async function GET(req: NextRequest) {
     today_amount: number;
     weekly_amount: number;
     lifetime_amount: number;
+    reply_count: number;
+    recast_count: number;
+    quote_count: number;
   }
 
   // Supabase에서 데이터 가져오기
@@ -259,6 +388,9 @@ export async function GET(req: NextRequest) {
     today_amount: data.today_amount,
     weekly_amount: data.weekly_amount,
     lifetime_amount: data.lifetime_amount,
+    reply_count: data.replyCount,
+    recast_count: data.recastCount,
+    quote_count:  data.quoteCount,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
@@ -282,6 +414,7 @@ export async function GET(req: NextRequest) {
         src: `${NEXT_PUBLIC_URL}/api/og?profileName=${frameData.profile_name}&fid=${frameData.fid}&profileImage=${profileImage}
                                        &farScore=${frameData.far_score}&farBoost=${frameData.far_boost}&farRank=${frameData.far_rank}
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
+                                       &replyCount=${frameData.reply_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },
