@@ -24,9 +24,18 @@ export async function GET(req: Request) {
   const farScore = searchParams.get('farScore') ?? "";
   const farBoost = searchParams.get('farBoost') ?? "";
   const farRank = searchParams.get('farRank') ?? "";
-  const finalFarScore = parseFloat(farScore).toLocaleString();
+  const finalFarScore = parseFloat(farScore).toFixed(2).toLocaleString();
   const finalFarBoost = parseFloat(farBoost).toLocaleString();
   const finalFarRank = parseFloat(farRank).toLocaleString();
+
+  const tvl = searchParams.get('tvl') ?? "";
+  const tvlBoost = searchParams.get('tvlBoost') ?? "";
+  const liquidityBoost = searchParams.get('liquidityBoost') ?? "";
+  const powerBoost = searchParams.get('powerBoost') ?? "";
+  //const finalTvl = parseFloat(tvl).toLocaleString();
+  const finalTvlBoost = parseFloat(tvlBoost).toLocaleString();
+  const finalLiquidityBoost = parseFloat(liquidityBoost).toLocaleString();
+  const finalPowerBoost = parseFloat(powerBoost).toLocaleString();
 
   const todayAmount = searchParams.get('todayAmount') ?? "";
   const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
@@ -36,12 +45,13 @@ export async function GET(req: Request) {
   const finalLifeTimeAmount = parseFloat(lifeTimeAmount).toLocaleString();
 
   const replyCount = searchParams.get('replyCount') ?? "";
+  const likeCount = searchParams.get('likeCount') ?? "";
   const recastCount = searchParams.get('recastCount') ?? "";
   const quoteCount = searchParams.get('quoteCount') ?? "";
 
 
-  console.warn("profileName=" + profileName);
-  console.warn("fid=" + fid);
+  // console.warn("profileName=" + profileName);
+  // console.warn("fid=" + fid);
   // console.warn("farScore=" + farScore);
   // console.warn("farBoost=" + farBoost);
   // console.warn("farRank=" + farRank);
@@ -72,6 +82,13 @@ export async function GET(req: Request) {
   let finalReplyKrw = 'N/A';
   let finalRcQtKrw  = 'N/A';
 
+  let tvlUsd = 0;
+  let finalTvl = 'N/A';
+  let finalTvlUsd = 'N/A';
+  
+  let tvlKrw = 0;
+  let finalTvlKrw = 'N/A';
+
   let todayAmountUsd    = 0;
   let weeklyAmountUsd   = 0;
   let lifeTimeAmountUsd = 0;
@@ -87,6 +104,7 @@ export async function GET(req: Request) {
   let finalLifeTimeAmountKrw = 'N/A';
 
   let finalReplyCount = 0;
+  let finalLikeCount = 0;
   let finalRcQtCount = 0;
 
   let moxieUsdPrice = 'N/A';
@@ -119,6 +137,16 @@ export async function GET(req: Request) {
     finalReplyKrw = replyKrw.toLocaleString();
     finalRcQtKrw = rcQtKrw.toLocaleString();
     
+    /* tvl 관련 USD */
+    tvlUsd    = parseFloat((parseFloat(tvl) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
+    finalTvlUsd = tvlUsd.toLocaleString();
+
+
+    /* tvl 관련 KRW */
+    tvlKrw    = parseFloat((parseFloat(tvl) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
+    finalTvlKrw = tvlKrw.toLocaleString();
+
+    finalTvl = (Number(tvl) / 1e3).toFixed(1);
 
     todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
     weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
@@ -135,6 +163,7 @@ export async function GET(req: Request) {
     finalLifeTimeAmountKrw = lifeTimeAmountKrw.toLocaleString();
 
     finalReplyCount = parseFloat(replyCount);
+    finalLikeCount = parseFloat(likeCount);
     finalRcQtCount = parseFloat(recastCount) + parseFloat(quoteCount);
 
   } catch (error) {
@@ -251,7 +280,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ( ∞ )
+                      ({finalLikeCount}/500)
                     </span>
                   </div>
 
@@ -262,7 +291,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {finalLike}
+                      {like.toFixed(2)} 
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
@@ -307,12 +336,12 @@ export async function GET(req: Request) {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '120px', marginBottom: '10px' }}>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      FarBoost
+                      FT / MP / LP
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                    {finalFarBoost}
+                    {finalTvlBoost} / {finalPowerBoost} / {finalLiquidityBoost}
                     </span>
                   </div>
 
@@ -329,7 +358,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {finalReply} 
+                      {reply.toFixed(2)} 
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
@@ -397,7 +426,7 @@ export async function GET(req: Request) {
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center' }}>
                     <span>
-                      {finalRcQt}
+                      {rcQt.toFixed(2)}
                     </span>
                   </div>
                   <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>

@@ -1,4 +1,3 @@
-
 import { getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
@@ -6,19 +5,11 @@ import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetail
 import { fetchQuery } from "@airstack/node";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import { config } from "dotenv";
-import { createClient } from '@supabase/supabase-js';
+import { fetchUserData, updateInsertUserData } from '@/app/utils/supabase';
 import axios from "axios";
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 export const dynamic = 'force-dynamic';
-
-// Supabase 클라이언트 초기화
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
-//개발db, 운영db 분리하기
-const supabaseDb = process.env.NODE_ENV == 'development' ? 'user_stats_dev' : 'user_stats';
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
@@ -54,6 +45,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
                   farScore
                   farBoost
                   farRank
+                  tvl
+                  tvlBoost
+                  liquidityBoost
+                  powerBoost
                 }
                 profileDisplayName
                 profileName
@@ -116,10 +111,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let farScore = 0;
     let farBoost = 0;
     let farRank = 0;
+    let tvl = 'N/A';
+    let tvlBoost = 0;
+    let liquidityBoost = 0;
+    let powerBoost = 0;
+
     let todayAmount = 0;
     let weeklyAmount = 0;
     let lifeTimeAmount = 0;
     
+    let likeCount = 0;
     let replyCount = 0;
     let recastCount = 0;
     let quoteCount = 0;
@@ -135,14 +136,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
           fetchQuery(socialCapitalQuery),
 
-          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=350&reverse=true`, {
+          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=400&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
             },
           }),
 
-          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=170&reverse=true`, {
+          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=200&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
@@ -152,6 +153,15 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           fetchQuery(quoteRecastsQuery)
         ]);
     
+        //5개 병렬시 오류가 자주나서 4개,1개로 병렬처리 분리
+        const [likesResponse] = await Promise.all([
+          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_LIKE&pageSize=999&reverse=true`, {
+            headers: {
+              "Content-Type": "application/json",
+              "x-airstack-hubs": apiKey as string,
+            },
+          }),
+        ]);
 
 
         //socialCapitalQueryData
@@ -161,6 +171,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         farScore = data.Socials.Social[0].farcasterScore.farScore.toFixed(3);
         farBoost = data.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
         farRank = data.Socials.Social[0].farcasterScore.farRank.toFixed(0);
+        tvl = (Number(data.Socials.Social[0].farcasterScore.tvl) / 1e18).toFixed(1); //실제 저장된 tvl목시개수는 10^18로 나눈다. 그다음 api/og로 전달. 넘겨서 다시 K표시위해 3으로 추가 나누기
+        tvlBoost = data.Socials.Social[0].farcasterScore.tvlBoost.toFixed(2);
+        liquidityBoost = data.Socials.Social[0].farcasterScore.liquidityBoost.toFixed(2);
+        powerBoost = data.Socials.Social[0].farcasterScore.powerBoost.toFixed(2);
+
         todayAmount = data.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
         weeklyAmount = data.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
         lifeTimeAmount = data.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
@@ -185,6 +200,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         console.warn("replyCount=" + replyCount);
     
 
+        // likesResponse에서 like 메시지 필터링
+        const filteredLikeMessages = likesResponse.data.messages.filter(
+          (message: { data: { timestamp: any } }) =>
+            message.data.timestamp > differenceInSeconds
+        );
+        //console.warn("filteredRecastMessages=" + JSON.stringify(filteredRecastMessages));
+        likeCount = filteredLikeMessages.length;
+        console.warn("likeCount=" + likeCount);
+
+
         // reactionsResponse에서 recast 메시지 필터링
         const filteredRecastMessages = reactionsResponse.data.messages.filter(
           (message: { data: { timestamp: any } }) =>
@@ -198,7 +223,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         // quoteRecastsQueryData에서 quote 메시지 필터링
         const todayStart = new Date().setUTCHours(0, 0, 0, 0);
         console.warn("todayStart=" + todayStart);
-
+        //console.warn("quoteRecastsQueryData=" + JSON.stringify(quoteRecastsQueryData));
         const filteredQuoteMessages = quoteRecastsQueryData.data.quoteRecasts.QuotedRecast.filter(
           (  item: { castedAtTimestamp: string | number | Date; }) => {
               const castedAt = new Date(item.castedAtTimestamp).getTime();
@@ -232,71 +257,26 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const encodedProfileImage = encodeURIComponent(profileImage);
 
     /**************** DB 작업 ****************/
-    // Supabase에서 fid가 있는지 확인
-    const { data: existingEntry, error: fetchError } = await supabase
-      .from(supabaseDb)  // 테이블 이름
-      .select('*')
-      .eq('fid', myFid)
-      .single(); // 단일 row만 가져오기
-
-    if (fetchError && fetchError.code !== 'PGRST116') {
-      // 'PGRST116' 코드는 row가 없는 경우의 에러 코드입니다.
-      console.error("Supabase 데이터 검색 오류:", fetchError);
-      throw new Error('Error fetching data from Supabase');
-    }
-
-    let error;
-    if (existingEntry) {
-      // fid가 이미 존재하는 경우, 업데이트 수행
-      const { error: updateError } = await supabase
-        .from(supabaseDb)
-        .update({
-          profile_name: profileName,
-          profile_image: profileImage,
-          far_score: farScore,
-          far_boost: farBoost,
-          far_rank: farRank,
-          today_amount: todayAmount,
-          weekly_amount: weeklyAmount,
-          lifetime_amount: lifeTimeAmount,
-          reply_count: replyCount,
-          recast_count: recastCount,
-          quote_count:  quoteCount,
-          mod_dtm: getKoreanISOString()
-        })
-        .eq('fid', myFid);
-
-      if (updateError) {
-        console.error("Supabase 데이터 업데이트 오류:", updateError);
-        throw new Error('Error updating data in Supabase');
-      }
-    } else {
-      // fid가 존재하지 않으면 삽입 수행
-      const { error: insertError } = await supabase
-        .from(supabaseDb)
-        .insert([
-          {
-            fid: myFid,
-            profile_name: profileName,
-            profile_image: profileImage,
-            far_score: farScore,
-            far_boost: farBoost,
-            far_rank: farRank,
-            today_amount: todayAmount,
-            weekly_amount: weeklyAmount,
-            lifetime_amount: lifeTimeAmount,
-            reply_count: replyCount,
-            recast_count: recastCount,
-            quote_count:  quoteCount,
-            reg_dtm: getKoreanISOString()
-          }
-        ]);
-
-      if (insertError) {
-        console.error("Supabase 데이터 삽입 오류:", insertError);
-        throw new Error('Error inserting data into Supabase');
-      }
-    }
+    // DB에 업데이트 또는 삽입
+    await updateInsertUserData({
+      fid: myFid,
+      profile_name: profileName,
+      profile_image: profileImage,
+      far_score: farScore,
+      far_boost: farBoost,
+      far_rank: farRank,
+      today_amount: todayAmount,
+      weekly_amount: weeklyAmount,
+      lifetime_amount: lifeTimeAmount,
+      reply_count: replyCount,
+      like_count: likeCount,
+      recast_count: recastCount,
+      quote_count: quoteCount,
+      tvl: tvl,
+      tvl_boost: tvlBoost,
+      liquidity_boost: liquidityBoost,
+      power_boost: powerBoost,
+    });
     /**************** DB 작업 끝 ****************/
 
     const frameUrl = `${NEXT_PUBLIC_URL}/api/frame?fid=${myFid}&cache_burst=${Math.floor(Date.now() / 1000)}`;
@@ -317,7 +297,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           src: `${NEXT_PUBLIC_URL}/api/og?profileName=${profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}
-                                         &replyCount=${replyCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
+                                         &replyCount=${replyCount}&likeCount=${likeCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
+                                         &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&powerBoost=${powerBoost}
                                          &cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
         },
@@ -332,12 +313,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 }
 
 
-function getKoreanISOString() {
-  const now = new Date();
-  const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 시간대 반영
-  return koreanTime.toISOString().slice(0, 19).replace('T', ' ');
-}
-
 export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);
 }
@@ -346,7 +321,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 export async function GET(req: NextRequest) {
   // Next.js의 NextRequest 객체에서 URL과 쿼리 매개변수를 직접 가져옵니다.
   const url = req.nextUrl; // NextRequest의 nextUrl 속성 사용
-  const fid = url.searchParams.get('fid'); // 'fid' 매개변수 추출
+  const fid = Number(url.searchParams.get('fid')); // 'fid' 매개변수 추출
 
   console.log("Extracted FID:", fid);
 
@@ -362,22 +337,22 @@ export async function GET(req: NextRequest) {
     weekly_amount: number;
     lifetime_amount: number;
     reply_count: number;
+    like_count: number;
     recast_count: number;
     quote_count: number;
+    tvl: number,
+    tvl_boost: number,
+    liquidity_boost: number,
+    power_boost: number,
   }
 
-  // Supabase에서 데이터 가져오기
-  const { data, error } = await supabase
-    .from(supabaseDb)  // 테이블 이름
-    .select('*')
-    .eq('fid', fid)
-    .single(); // 단일 row 가져오기
-
-  if (error) {
-    return NextResponse.json({ error: 'Error fetching data from Supabase' }, { status: 500 });
+ /**************** DB 작업 ****************/
+  const data = await fetchUserData(fid);
+  if (!data) {
+    return new NextResponse('No data found', { status: 404 });
   }
-
   console.log("api/frame/route.ts_data=" + JSON.stringify(data));
+ /**************** DB 작업 끝 ****************/
 
   const frameData: FrameData = {
     fid: data.fid,
@@ -390,8 +365,13 @@ export async function GET(req: NextRequest) {
     weekly_amount: data.weekly_amount,
     lifetime_amount: data.lifetime_amount,
     reply_count: data.reply_count,
+    like_count: data.like_count,
     recast_count: data.recast_count,
     quote_count:  data.quote_count,
+    tvl:  data.tvl,
+    tvl_boost:  data.tvl_boost,
+    liquidity_boost:  data.liquidity_boost,
+    power_boost: data.power_boost,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
@@ -415,7 +395,8 @@ export async function GET(req: NextRequest) {
         src: `${NEXT_PUBLIC_URL}/api/og?profileName=${frameData.profile_name}&fid=${frameData.fid}&profileImage=${profileImage}
                                        &farScore=${frameData.far_score}&farBoost=${frameData.far_boost}&farRank=${frameData.far_rank}
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
-                                       &replyCount=${frameData.reply_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
+                                       &replyCount=${frameData.reply_count}&likeCount=${frameData.like_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
+                                       &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&powerBoost=${frameData.power_boost}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },
