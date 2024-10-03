@@ -24,6 +24,7 @@ export async function GET() {
           fontFamily: '"Recipekorea"', // 폰트 이름
           backgroundColor: 'white',
           backgroundImage: 'linear-gradient(to bottom, #dbf4ff, #fff1f1)',
+          //backgroundImage: `url(${NEXT_PUBLIC_URL}/thanksgiving_day.png?v=2)`,
           color: 'black',
           padding: '40px',
         }}
@@ -69,6 +70,7 @@ export async function GET() {
             textAlign: 'center',
             backgroundColor: '#B455A2',
             color: 'white',
+            opacity: 0.8,
             lineHeight: 2,
           }}
         >

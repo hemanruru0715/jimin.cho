@@ -19,7 +19,7 @@ const frameMetadata = getFrameMetadata({
     src: `${NEXT_PUBLIC_URL}/api/mainog`,
     aspectRatio: '1:1',
   },
-  postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+  postUrl: `${NEXT_PUBLIC_URL}/api/frame?cache_burst=${Math.floor(Date.now() / 1000)}`,
 });
 
 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'hemanruru.vercel.app',
     description: 'Check the MOXIE stats',
-     images: [`${NEXT_PUBLIC_URL}/park-3.png`],
+     images: [`${NEXT_PUBLIC_URL}/mainImage.png`],
   },
   other: {
     ...frameMetadata,
