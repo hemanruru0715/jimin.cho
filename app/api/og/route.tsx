@@ -116,9 +116,9 @@ export async function GET(req: Request) {
     moxieKrwPrice = parseFloat(krwPrice).toLocaleString('ko-KR');
 
     //화면 구성값 계산
-    like  = parseFloat(farScore) * 1;
-    reply = parseFloat((parseFloat(farScore) * 3).toFixed(3));
-    rcQt  = parseFloat((parseFloat(farScore) * 6).toFixed(3));
+    like  = parseFloat(farScore) * 0.5;
+    reply = parseFloat((parseFloat(farScore) * 2).toFixed(3));
+    rcQt  = parseFloat((parseFloat(farScore) * 4).toFixed(3));
     finalLike  = like.toLocaleString();
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
