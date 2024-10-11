@@ -117,8 +117,8 @@ export async function GET(req: Request) {
 
     //화면 구성값 계산
     like  = parseFloat(farScore) * 0.5;
-    reply = parseFloat((parseFloat(farScore) * 2).toFixed(3));
-    rcQt  = parseFloat((parseFloat(farScore) * 4).toFixed(3));
+    reply = parseFloat((parseFloat(farScore) * 1).toFixed(3));
+    rcQt  = parseFloat((parseFloat(farScore) * 2).toFixed(3));
     finalLike  = like.toLocaleString();
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
@@ -347,7 +347,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ({finalReplyCount}/300)
+                      ({finalReplyCount}/200)
                     </span>
                   </div>
 
@@ -415,7 +415,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ({finalRcQtCount}/150)
+                      ({finalRcQtCount}/100)
                     </span>
                   </div>
 
