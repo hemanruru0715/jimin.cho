@@ -446,7 +446,7 @@ export async function GET(req: NextRequest) {
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
                                        &replyCount=${frameData.reply_count}&likeCount=${frameData.like_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
                                        &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&powerBoost=${frameData.power_boost}
-                                       &allowReply=${frameData.allow_reply}&allowRcQt=${frameData.allow_rcqt}
+                                       &allowLike=${frameData.allow_like}&allowReply=${frameData.allow_reply}&allowRcQt=${frameData.allow_rcqt}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },
