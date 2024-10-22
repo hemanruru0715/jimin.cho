@@ -49,6 +49,13 @@ export async function GET(req: Request) {
   const recastCount = searchParams.get('recastCount') ?? "";
   const quoteCount = searchParams.get('quoteCount') ?? "";
 
+  const allowLike = searchParams.get('allowLike') ?? "";
+  const allowReply = searchParams.get('allowReply') ?? "";
+  const allowRcQt = (searchParams.get('allowRcQt') ?? "").replace(/\s+/g, '');
+
+  console.log("@@@allowLike=" + allowLike);
+  console.log("@@@allowReply=" + allowReply);
+  console.log("@@@allowRcQt=" + allowRcQt);
 
   // console.warn("profileName=" + profileName);
   // console.warn("fid=" + fid);
@@ -280,7 +287,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ({finalLikeCount}/500)
+                      ({finalLikeCount}/{allowLike})
                     </span>
                   </div>
 
@@ -347,7 +354,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ({finalReplyCount}/200)
+                      ({finalReplyCount}/{allowReply})
                     </span>
                   </div>
 
@@ -415,7 +422,7 @@ export async function GET(req: Request) {
 
                   <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
                     <span>
-                      ({finalRcQtCount}/100)
+                      ({finalRcQtCount}/{allowRcQt})
                     </span>
                   </div>
 
